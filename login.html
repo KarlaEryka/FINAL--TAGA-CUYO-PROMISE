@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- link css  -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- icons  -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <title>Admin Sign In</title>
+</head>
+
+<body>
+    <div class="flex-r container">
+        <div class="flex-r login-wrapper">
+            <div class="login-text">
+                <div class="logo">
+                    <img id="logo" src="images/logo.png" />
+                </div>
+                <h1>Sign in</h1>
+
+                <form class="flex-c" id="loginForm">
+                    <div class="input-box">
+                        <span class="label">E-mail</span>
+                        <div class="flex-r input">
+                            <input type="text" id="email" placeholder="name@email.com" required>
+                            <i class="fas fa-at"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="label">Password</span>
+                        <div class="flex-r input">
+                            <input type="password" id="password" placeholder="Password" required>
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+
+                    <a href="#" id="forgotPassword" class="forgot-password">Forgot Password?</a>
+                    <button type="submit" id="login_submit" class="btn">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getDatabase, ref, update, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAqr7jav_7l0Y7gIhfTklJXnHPzjAYV8f4",
+    authDomain: "taga-cuyo-app.firebaseapp.com",
+    databaseURL: "https://taga-cuyo-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "taga-cuyo-app",
+    storageBucket: "taga-cuyo-app.firebasestorage.app",
+    messagingSenderId: "908851804845",
+    appId: "1:908851804845:web:dff839dc552a573a23a424",
+    measurementId: "G-NVSY2HPNX4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
+
+// Handle login form submission
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Sign in with email and password
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            const dt = new Date();
+
+            // Update last login time
+            update(ref(database, 'admin/' + user.uid), {
+                last_login: dt.toString(),
+            }).catch((error) => {
+                console.error("Error updating Realtime Database: ", error);
+            });
+
+            // Check user role
+            const userRef = ref(database, 'admin/' + user.uid + '/role');
+            get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const role = snapshot.val();
+
+                    if (role === "superadmin") {
+                        alert("Welcome, Superadmin!");
+                        window.location.href = "dashboard.html"; // Redirect Superadmin to Dashboard
+                    } else if (role === "admin") {
+                        alert("Welcome, Admin! Redirecting to Settings...");
+                        window.location.href = "settings.html"; // Redirect Admin to Settings
+                    } else {
+                        alert("Unauthorized role. Please contact support.");
+                    }
+                } else {
+                    alert("User role not found. Please contact support.");
+                }
+            }).catch((error) => {
+                console.error("Error fetching user role: ", error);
+                alert("An error occurred while verifying your role.");
+            });
+        })
+        .catch((error) => {
+            alert("Error: " + error.message);
+        });
+});
+
+// Forgot Password Functionality
+document.getElementById('forgotPassword').addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+
+    if (!email) {
+        alert("Please enter your email address to reset your password.");
+        return;
+    }
+
+    sendPasswordResetEmail(auth, email)
+        .then(() => {
+            alert("Password reset email sent! Check your inbox or spam folder.");
+        })
+        .catch((error) => {
+            alert('Error: ' + error.message);
+        });
+});
+
+    </script>
+
+    <style>
+        /* Add styles for the forgot-password link */
+        .forgot-password {
+            display: block;
+            margin: 10px 0;
+            text-align: right;
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="CSS/dashboard.css">
+  
+    
+    <title>Admin dashboard</title>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="#" class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
+        <ul class="side-menu">
+            <li><a href="#" class="active"><i class='bx bxs-dashboard icon'></i> Admin dashboard</a></li>
+            <li class="divider" data-text="main">Main</li>
+            <li>
+                <a href="#"><i class='bx bxs-inbox icon'></i> User Management <i class='bx bx-chevron-right icon-right'></i></a>
+                <ul class="side-dropdown">
+                    <li><a href="list_of_users.html" class="active"><i class='mdi mdi-account icon'></i> List of Users</a></li>
+                    <li><a href="list_of_staff.html"><i class='uil uil-users-alt icon'></i> Manage Staff</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class='bx bxs-graduation icon'></i> Learning Feature Status <i class='bx bx-chevron-right icon-right'></i></a>
+                <ul class="side-dropdown">
+                    <li><a href="status.html"><i class='bx bx-time icon'></i>Status</a></li>
+                    <li><a href="lesson.html"><i class='bx bxs-book icon'></i>Aralin</a></li>
+                    <li><a href="category.html"><i class='bx bxs-category icon'></i>Kategorya</a></li>
+                    <li><a href="translator.html"><i class='bx bx-globe icon'></i>Translator</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class='bx bxs-comment icon'></i> Support and Feedback <i class='bx bx-chevron-right icon-right'></i></a>
+                <ul class="side-dropdown">
+                    <li><a href="feedback2.html"><i class='bx bxs-message-rounded icon'></i>User Feedback</a></li>
+                    <li><a href="user_support.html"><i class='uil uil-headphones-alt icon'></i>User Support</a></li>
+                    <li><a href="user_reports.html"><i class='uil uil-exclamation-triangle icon '></i>User Report</a></li>                </ul>
+            </li>
+            <li><a href="terms_and_condition.html"><i class='bx bxs-file icon'></i> Terms and Condition</a></li>
+            <li><a href="settings.html"><i class='bx bxs-cog icon'></i> Settings</a></li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+    <!-- NAVBAR -->
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu toggle-sidebar'></i>
+            <form id="searchForm">
+                <div class="form-group">
+                </div>
+            </form>
+            <div class="profile">
+                <div class="notification-icon" onclick="toggleNotificationDropdown()">
+                    <i class='bx bxs-bell' style="font-size: 20px;"></i>
+                    <span id="notificationCounter" class="notification-counter" style="display: none;"></span>
+                </div>
+                <div id="notificationDropdown" class="notification-dropdown hidden">
+                    <h4></h4>
+                    <ul id="notificationList">
+                        <!-- Notifications will be populated here -->
+                    </ul>
+                </div>
+                <img src="images/logo.png" alt="Profile Image">
+                <ul class="profile-link">
+                    <li><a href="/settings.html"><i class='bx bxs-cog'></i> Settings</a></li>
+                    <li><a href="login.html"><i class='bx bxs-log-out-circle'></i> Logout</a></li>
+                    
+                </ul>
+            </div>
+            
+        </nav>
+        <main>
+            <div class="welcome-message">
+                <h1>Welcome to the Admin dashboard!</h1>
+                <p>Your one-stop portal for managing users, tracking activities, and viewing key metrics.</p>
+            </div>
+    
+                <div class="dashboard">
+                <div class="stat-card">
+                    <strong id="total-users"></strong>
+                    <p>Total Users</p>
+                </div>
+                <div class="stat-card">
+                    <strong id="online-users"></strong>
+                    <p>Active Users</p>
+                </div>
+                <div class="recent-activity-card">
+                    <h3>Recent User Data</h3>
+                    <div class="user-list-container">
+                        <ul id="user-list" class="user-list">
+                            <!-- User information will be dynamically populated here -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Language Preference</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="age-group-card">
+                    <h3>Age Group</h3>
+                    <div class="canvas-container">
+                        <canvas id="doughnutChart"></canvas>
+
+                    </div>
+                </div>
+                <div class="recent-activity-card">
+                    <h3>Translations</h3>
+                    <ol id="translated-phrases-list">
+                        <ul></ul>
+                        <!-- Top translated phrases will be dynamically populated here -->
+                    </ol>
+                </div>
+                <div class="recent-activity-card">
+                    <h3>Recent Staff Activities</h3>
+                    <div class="activity-list-container">
+                        <ul id="activity-list" class="activity-list">
+                            <!-- Recent staff activities will be dynamically populated here -->
+                        </ul>
+                    </div>
+                </div>                
+                <div class="recent-activity-card user-support-card">
+                    <h3>Recent User Support</h3>
+                    <div class="activity-list-container">
+                        <ul class="activity-list" id="userSupportList">
+                            <!-- User support activities will be populated here -->
+                        </ul>
+                    </div>
+                </div>             
+            </div>
+            <div class="chart-card">
+                <h3>Number of Users</h3>
+                <canvas id="lineChart"></canvas>
+            </div>
+        </main>
+    </section>
+    <!-- Firebase Integration Script -->
+    <script type="module" src="scripts/dashboard/firebase-config.js"></script>
+    <script type="module" src="scripts/dashboard/user-data.js"></script>
+    <script type="module" src="scripts/dashboard/chart-updates.js"></script>
+    <script type="module" src="scripts/dashboard/activities.js"></script>
+    <script type="module" src="scripts/dashboard/translations.js"></script>
+    <script type="module" src="scripts/dashboard/dashboard.js"></script>
+    <script type="module" src="scripts/script.js"></script>
+    <script type="module" src="scripts/search-users.js"></script>
+
+    
+</body>
+</html>
+

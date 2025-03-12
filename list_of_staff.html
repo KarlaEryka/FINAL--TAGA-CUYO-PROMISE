@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+        <link rel="stylesheet" href="CSS/staff_list.css">
+        <title>User Management</title>
+    </head>
+    <body>
+         <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="dashboard.html" class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
+        <ul class="side-menu">
+            <li><a href="dashboard.html"><i class='bx bxs-dashboard icon'></i> Admin Dashboard</a></li>
+            <li class="divider" data-text="main">Main</li>
+            <li>
+                <a href="#"><i class='bx bxs-inbox icon' class="active"></i> User Management <i class='bx bx-chevron-right icon-right'></i></a>
+                <ul class="side-dropdown">
+                    <li><a href="list_of_users.html" ><i class='mdi mdi-account icon'></i> List of Users</a></li>
+                    <li><a href="staff.html"><i class='uil uil-users-alt icon'></i> Manage Staff</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class='bx bxs-graduation icon'></i> Learning Feature Status <i class='bx bx-chevron-right icon-right'></i></a>
+                <ul class="side-dropdown">
+                    <li><a href="Pending.html"><i class='bx bx-time icon'></i>Status</a></li>
+                    <li><a href="lesson.html"><i class='bx bxs-book icon'></i>Aralin</a></li>
+                    <li><a href="category.html"><i class='bx bxs-category icon'></i>Kategorya</a></li>
+                    <li><a href="category.html"><i class='bx bx-globe icon'></i>Translator</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class='bx bxs-comment icon'></i> Support and Feedback <i class='bx bx-chevron-right icon-right'></i></a>
+                <ul class="side-dropdown">
+                    <li><a href="feedback2.html" class="active"><i class='bx bxs-message-rounded icon'></i>User Feedback</a></li>
+                    <li><a href="user_support.html"><i class='uil uil-headphones-alt icon'></i>User Support</a></li>
+                </ul>
+            </li>
+            <li><a href="terms_and_condition.html"><i class='bx bxs-file icon'></i> Terms and Condition</a></li>
+            <li><a href="settings.html"><i class='bx bxs-cog icon'></i> Settings</a></li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+        <!-- NAVBAR -->
+        <section id="content">
+            <nav>   
+                <i class='bx bx-menu toggle-sidebar'></i>
+                <form action="#">
+                    <div class="form-group">
+                        <input type="text" id="searchInput" placeholder="Search...">
+                        <i class='bx bx-search icon'></i>
+                    </div>
+                </form>
+                <div class="profile">
+                    <div class="notification-icon" onclick="toggleNotificationDropdown()">
+                        <i class='bx bxs-bell'  style="font-size: 20px;"></i>
+                        <span id="notificationCounter" class="notification-counter"></span>
+                    </div>
+                    <div id="notificationDropdown" class="notification-dropdown hidden">
+                        <h4></h4>
+                        <ul id="notificationList">
+                            <!-- Notifications will be populated here -->
+                        </ul>
+                    </div>
+                    <img src="images/logo.png" alt="Profile Image">
+                    <ul class="profile-link">
+                        <li><a href="settings.html"><i class='bx bxs-cog'></i> Settings</a></li>
+                        <li><a href="login.html"><i class='bx bxs-log-out-circle'></i> Logout</a></li>
+                    </ul>
+                    </div>
+            </nav>
+            <!-- NAVBAR -->
+            <main>
+            <div class="user-management">
+                <h2>User Management > Administrators</h2>
+                <div class="container">
+                    <button id="addStaffBtn">Add New Member</button>
+                    <table class="table table-bordered mt-3" id="staffTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Date Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Staff rows will be populated here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        </section>
+        
+        <div id="addStaffModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Add New Member</h2>
+                <form id="addStaffForm">
+                    
+                    <label for="role">Role:</label>
+                    <select id="role" required>
+                        <option value="staff">Staff</option>
+                        <option value="admin" disabled>Admin</option>
+                    </select>
+
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" required>
+        
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" required>
+        
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+    
+                    <label for="birthdate">Birthdate:</label>
+                    <input type="date" id="birthdate" required>
+
+                    <label for="gender">Gender:</label>
+                        <select id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+
+                        <label for="phoneNumber">Phone Number (PH):</label>
+                        <input type="tel" id="phoneNumber" required placeholder="+639XXXXXXXXX or 09XXXXXXXXX">
+                        <small id="phoneError" style="color: red; display: none;">Invalid phone number format!</small>
+                        
+        
+                    <button type="save-btn">Add Member</button>
+                </form>
+            </div>
+        </div>
+<script type="module">
+    import { displayUsers } from "./scripts/staff/displayUsers.js";
+    import { addStaff } from "./scripts/staff/addStaff.js";
+    import { deleteUserAccount } from "./scripts/staff/deleteUser.js";
+  //  import { resetPassword } from "./scripts/staff/resetPassword.js";
+    import "./scripts/staff/authHandlers.js";
+    //import { showPasswordPrompt } from "./scripts/staff/passwordPrompt.js";
+
+    /// Event listener for the close button
+document.querySelector(".close-btn").addEventListener("click", () => {
+    document.getElementById("addStaffModal").style.display = "none";
+});
+
+// Event listener for the "Add New Member" button
+document.getElementById("addStaffBtn").addEventListener("click", () => {
+    document.getElementById("addStaffModal").style.display = "block";
+});
+
+// Event listener for form submission
+document.getElementById("addStaffForm").addEventListener("submit", addStaff);
+  
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+<script src="scripts/script.js"></script>
+</body>
+</html>
