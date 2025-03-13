@@ -18,8 +18,10 @@ async function loadHistory() {
         // Apply background color based on adminAction
         if (data.adminAction === 'Deleted content') {
             row.classList.add('deleted-content');
-        } else if (data.adminAction === 'Added content' || data.adminAction === 'Edited content') {
+        } else if (data.adminAction === 'Added content') {
             row.classList.add('added-content');
+        } else if (data.adminAction === 'Edited content') {
+            row.classList.add('edited-content');
         } else if (data.adminAction === 'Dismissed content') {
             row.classList.add('dismissed-content');
         }
