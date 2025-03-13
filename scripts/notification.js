@@ -9,7 +9,7 @@ const firebaseConfig = {
     measurementId: "G-NVSY2HPNX4"
 };
 
-// Initialize Firebase
+// Initialize Firebase if not already initialized
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -22,12 +22,10 @@ function toggleNotificationDropdown() {
     if (dropdown) {
         dropdown.classList.toggle("show");
 
-        // Reset the notification counter when opened
-        if (dropdown.classList.contains("show")) {
-            const notificationCounter = document.getElementById("notificationCounter");
-            if (notificationCounter) {
-                notificationCounter.innerText = '0';
-            }
+        // Reset notification counter display but keep the count
+        const notificationCounter = document.getElementById("notificationCounter");
+        if (notificationCounter && dropdown.classList.contains("show")) {
+            notificationCounter.style.display = "none";
         }
     }
 }
@@ -35,57 +33,85 @@ function toggleNotificationDropdown() {
 // Attach to the window object for global access
 window.toggleNotificationDropdown = toggleNotificationDropdown;
 
-function createNotification(activity) {
+// Function to create a notification
+function createNotification(activity, docId) {
+    console.log("Creating notification:", activity); // DEBUGGING
+
     const notificationList = document.getElementById("notificationList");
     if (!notificationList) return;
 
     const notificationItem = document.createElement("li");
-
-    // Format notification message with structured content
     notificationItem.innerHTML = `
         <div><strong>Action:</strong> ${activity.action}</div>
         <div><strong>Added By:</strong> ${activity.addedBy}</div>
         <div><strong>Location:</strong> ${activity.location}</div>
     `;
+    notificationItem.style.cursor = "pointer";
 
-    // Make the notification item clickable
-    notificationItem.style.cursor = "pointer"; // Change cursor to pointer
-    notificationItem.addEventListener("click", () => {
-        // Redirect to status.html when clicked
+    // On click, mark as read & remove
+    notificationItem.addEventListener("click", async () => {
+        try {
+            // Mark as read in Firestore
+            await db.collection("activities").doc(docId).update({ read: true });
+            console.log("Marked as read:", docId);
+
+            // Remove from UI
+            notificationItem.remove();
+            updateNotificationCounter();
+        } catch (error) {
+            console.error("Error updating document:", error);
+        }
+
+        // Redirect to status page
         window.location.href = "status.html";
     });
 
-    // Append to notification list
     notificationList.prepend(notificationItem);
+    updateNotificationCounter();
+}
 
-    // Update notification counter
+// Function to update the notification counter
+function updateNotificationCounter() {
     const notificationCounter = document.getElementById("notificationCounter");
-    if (notificationCounter) {
-        let currentCount = parseInt(notificationCounter.innerText, 10) || 0;
-        notificationCounter.innerText = currentCount + 1;
-        notificationCounter.style.display = 'inline'; // Show the counter
+    const notificationList = document.getElementById("notificationList");
+    if (!notificationCounter || !notificationList) return;
+
+    let count = notificationList.children.length;
+    if (count > 0) {
+        notificationCounter.innerText = count;
+        notificationCounter.style.display = "inline";
+    } else {
+        notificationCounter.style.display = "none";
     }
 }
 
 // Check if the user is signed in
 auth.onAuthStateChanged((user) => {
     if (user) {
-        // User is signed in, proceed with Firestore query
-        db.collection("activities").onSnapshot((snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-                if (change.type === "added") {
-                    createNotification(change.doc.data());
+        console.log("User signed in:", user.uid); // DEBUGGING
+
+        db.collection("activities")
+            .where("read", "==", false) // Only fetch unread notifications
+            .onSnapshot((snapshot) => {
+                if (snapshot.empty) {
+                    console.log("No unread notifications found.");
                 }
+
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        console.log("New notification:", change.doc.data()); // DEBUGGING
+                        createNotification(change.doc.data(), change.doc.id);
+                    }
+                });
+            }, (error) => {
+                console.error("Firestore error:", error);
             });
-        }, (error) => {
-            console.error("Error listening to Firestore changes:", error);
-        });
     } else {
-        // User is not signed in, redirect to login page
-        console.log("User is not signed in.");
-        window.location.href = "/login.html"; // Redirect to login page
+        console.log("User not signed in.");
+        window.location.href = "/login.html";
     }
 });
+
 
 // Close dropdown when clicking outside
 document.addEventListener("click", function(event) {
