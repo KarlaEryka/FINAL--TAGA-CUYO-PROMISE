@@ -71,15 +71,12 @@
         <nav>
             <i class='bx bx-menu toggle-sidebar'></i>
             <form action="#">
-                <div class="form-group">
-                    <input type="text" placeholder="Search...">
-                    <i class='bx bx-search icon'></i>
-                </div>
+                
             </form>
             <div class="profile">
                 <div class="notification-icon" onclick="toggleNotificationDropdown()">
-                    <i class='bx bxs-bell'></i>
-                    <span id="notificationCounter" class="notification-counter"></span>
+                    <i class='bx bxs-bell' style="font-size: 20px;"></i>
+                    <span id="notificationCounter" class="notification-counter" style="display: none;"></span>
                 </div>
                 <div id="notificationDropdown" class="notification-dropdown hidden">
                     <h4></h4>
@@ -220,6 +217,7 @@ document.getElementById('savePhoneBtn').addEventListener('click', async () => {
     </script>
     <script src="scripts/script.js"></script>
     <script type="module" src="scripts/dashboard/dashboard.js"></script>
+    <script type="module" src="scripts/notification.js"></script>
 
     
 </body>
