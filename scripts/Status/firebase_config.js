@@ -6,7 +6,7 @@
             apiKey: "AIzaSyAqr7jav_7l0Y7gIhfTklJXnHPzjAYV8f4",
             authDomain: "taga-cuyo-app.firebaseapp.com",
             projectId: "taga-cuyo-app",
-            storageBucket: "taga-cuyo-app.firebasestorage.app",
+            storageBucket: "taga-cuyo-app.appspot.com",
             messagingSenderId: "908851804845",
             appId: "1:908851804845:web:dff839dc552a573a23a424",
             measurementId: "G-NVSY2HPNX4"
@@ -26,4 +26,20 @@
 
     });
     
-    export { initializeApp, getDocs,doc,updateDoc,deleteDoc,getDoc,addDoc,query,orderBy,getAuth, onAuthStateChanged,collection,db,auth,serverTimestamp,where,setDoc};
+    export { 
+        db, 
+        auth, 
+        collection, 
+        getDocs, 
+        doc, 
+        updateDoc, 
+        deleteDoc, 
+        getDoc, 
+        addDoc, 
+        query, 
+        orderBy, 
+        serverTimestamp, 
+        where, 
+        setDoc, 
+        onAuthStateChanged, initializeApp 
+    };

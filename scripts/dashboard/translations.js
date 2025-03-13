@@ -1,7 +1,21 @@
 import { collection, query, orderBy, limit, getDocs,getDoc,doc } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
-import { db } from './firebase-config.js'; // Import db from firebase-config.js\
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { db,getAuth,app } from './firebase-config.js'; // Import db from firebase-config.js\
 import { onAuthStateChanged } from './dashboard.js';
+// Initialize Firebase Auth
+const auth = getAuth(app); 
+function enforceAccessControl(user) {
+    if (!user) {
+        // Redirect to login or show an access denied message
+        window.location.href = "login.html"; 
+    } else {
+        console.log("User is logged in:", user);
+    }
+}
+
+// Now, it can be used in the onAuthStateChanged function
+onAuthStateChanged(auth, (user) => {
+    enforceAccessControl(user);
+});
 async function updateTranslations() {
     const translationsList = document.getElementById('translated-phrases-list');
     translationsList.innerHTML = ''; // Clear the list before updating

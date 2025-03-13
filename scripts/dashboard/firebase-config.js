@@ -22,4 +22,5 @@ const db = getFirestore(app);
 
 
 // Exporting the db to use in other files
-export { db,initializeApp,firebaseConfig };
+export { db,initializeApp,firebaseConfig,app,getAuth,auth
+ };

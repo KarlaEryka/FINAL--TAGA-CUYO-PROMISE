@@ -44,7 +44,7 @@ function createUserListItem(userData, userList) {
     const listItem = document.createElement('li');
     listItem.innerHTML = `
         <strong>Email:</strong> ${userData.email} <br>
-        <strong>Name:</strong> ${userData.firstName} ${userData.lastName} <br>
+        <strong>Name:</strong> ${userData.name} <br>
         <strong>Gender:</strong> ${userData.gender || 'N/A'} <br>
     `;
 

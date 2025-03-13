@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js"; 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { firebaseConfig } from "./firebase-config.js"; // Import Firebase config
 
 // Initialize Firebase
@@ -19,17 +19,21 @@ onAuthStateChanged(auth, async (user) => {
             if (snapshot.exists()) {
                 const role = snapshot.val();
 
-                // Select the Admin Dashboard menu item
-                const adminDashboardMenuItem = document.querySelector(".side-menu li a.active");
+                // Select the container for the entire page content
+                const pageContent = document.body; // Clear the entire body content
 
                 if (role === "admin") {
-                    // Hide the Admin Dashboard menu option
-                    if (adminDashboardMenuItem) {
-                        adminDashboardMenuItem.parentElement.style.display = "none"; 
-                    }
+                    // Clear the entire page content for admin users
+                    pageContent.innerHTML = ""; // Remove all content from the page
+                    pageContent.style.backgroundColor = "white"; // Optional: Set a blank background
+                } else if (role === "superadmin") {
+                    // Show the full dashboard for superadmin users
+                    // No changes needed, the content remains visible
+                } else {
+                    // Handle other roles or unauthorized access
+                    alert("Unauthorized access. Contact support.");
+                    window.location.href = "login.html";
                 }
-                // If role is "superadmin", do nothing (they can see everything)
-
             } else {
                 alert("User role not found. Contact support.");
                 window.location.href = "login.html";
@@ -44,4 +48,6 @@ onAuthStateChanged(auth, async (user) => {
         window.location.href = "login.html";
     }
 });
-export{onAuthStateChanged};
+
+
+export{onAuthStateChanged}
