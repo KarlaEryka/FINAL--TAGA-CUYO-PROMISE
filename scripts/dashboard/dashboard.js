@@ -8,6 +8,47 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
+// Function to toggle the visibility of sidebar menus based on the user's role
+function toggleSidebarMenuVisibility(role) {
+    const sidebar = document.getElementById("sidebar");
+    // Show the sidebar only after the role is verified
+    if (sidebar) sidebar.style.display = "block";
+
+    const dashboardMenu = document.getElementById("dashboard-menu");
+    const userManagementMenu = document.getElementById("user-management-menu");
+    const learningFeatureMenu = document.getElementById("learning-feature-menu");
+    const supportFeedbackMenu = document.getElementById("support-feedback-menu");
+    const termsMenu = document.getElementById("terms-menu");
+    const settingsMenu = document.getElementById("settings-menu");
+
+    // Define which menus are visible for each role
+    if (role === "superadmin") {
+        // Superadmin can see all menus
+        if (dashboardMenu) dashboardMenu.style.display = "block";
+        if (userManagementMenu) userManagementMenu.style.display = "block";
+        if (learningFeatureMenu) learningFeatureMenu.style.display = "block";
+        if (supportFeedbackMenu) supportFeedbackMenu.style.display = "block";
+        if (termsMenu) termsMenu.style.display = "block";
+        if (settingsMenu) settingsMenu.style.display = "block";
+    } else if (role === "admin") {
+        // Admin can see specific menus (e.g., no Dashboard menu)
+        if (dashboardMenu) dashboardMenu.style.display = "none"; // Hide Dashboard
+        if (userManagementMenu) userManagementMenu.style.display = "block";
+        if (learningFeatureMenu) learningFeatureMenu.style.display = "block";
+        if (supportFeedbackMenu) supportFeedbackMenu.style.display = "block";
+        if (termsMenu) termsMenu.style.display = "block";
+        if (settingsMenu) settingsMenu.style.display = "block";
+    } else {
+        // Other roles (e.g., no access)
+        if (dashboardMenu) dashboardMenu.style.display = "none";
+        if (userManagementMenu) userManagementMenu.style.display = "none";
+        if (learningFeatureMenu) learningFeatureMenu.style.display = "none";
+        if (supportFeedbackMenu) supportFeedbackMenu.style.display = "none";
+        if (termsMenu) termsMenu.style.display = "none";
+        if (settingsMenu) settingsMenu.style.display = "none";
+    }
+}
+
 // Check user authentication state
 onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -19,18 +60,15 @@ onAuthStateChanged(auth, async (user) => {
             if (snapshot.exists()) {
                 const role = snapshot.val();
 
-                // Select the container for the entire page content
-                const pageContent = document.body; // Clear the entire body content
+                // Toggle the visibility of sidebar menus based on the user's role
+                toggleSidebarMenuVisibility(role);
 
+                // Handle other role-based logic (e.g., redirects)
                 if (role === "admin") {
-                    // Clear the entire page content for admin users
-                    pageContent.innerHTML = ""; // Remove all content from the page
-                    pageContent.style.backgroundColor = "white"; // Optional: Set a blank background
+                    // Additional logic for admin users
                 } else if (role === "superadmin") {
-                    // Show the full dashboard for superadmin users
-                    // No changes needed, the content remains visible
+                    // Additional logic for superadmin users
                 } else {
-                    // Handle other roles or unauthorized access
                     alert("Unauthorized access. Contact support.");
                     window.location.href = "login.html";
                 }
@@ -49,5 +87,4 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-
-export{onAuthStateChanged}
+export { onAuthStateChanged };

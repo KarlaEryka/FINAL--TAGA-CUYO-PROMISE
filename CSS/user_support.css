@@ -586,6 +586,7 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
     background-color: #fff;
 }
+
 .modal {
 	display: none; 
 	position: fixed; 
