@@ -1,20 +1,13 @@
-// Initialize Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyAqr7jav_7l0Y7gIhfTklJXnHPzjAYV8f4",
-    authDomain: "taga-cuyo-app.firebaseapp.com",
-    projectId: "taga-cuyo-app",
-    storageBucket: "taga-cuyo-app.appspot.com",
-    messagingSenderId: "908851804845",
-    appId: "1:908851804845:web:dff839dc552a573a23a424",
-    measurementId: "G-NVSY2HPNX4"
-};
+// Import Firebase modules (ES6+ modular syntax)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, collection, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { firebaseConfig } from "./dashboard/firebase-config.js";
 
-// Initialize Firebase if not already initialized
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
-const auth = firebase.auth();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 // Toggle notification dropdown
 function toggleNotificationDropdown() {
@@ -22,7 +15,7 @@ function toggleNotificationDropdown() {
     if (dropdown) {
         dropdown.classList.toggle("show");
 
-        // Reset notification counter display but keep the count
+        // Reset notification counter display when dropdown is opened
         const notificationCounter = document.getElementById("notificationCounter");
         if (notificationCounter && dropdown.classList.contains("show")) {
             notificationCounter.style.display = "none";
@@ -46,28 +39,31 @@ function createNotification(activity, docId) {
         <div><strong>Added By:</strong> ${activity.addedBy}</div>
         <div><strong>Location:</strong> ${activity.location}</div>
     `;
-    notificationItem.style.cursor = "pointer";
+    notificationItem.style.cursor = "pointer"; 
 
-    // On click, mark as read & remove
+    // On click, mark as read & remove from the UI
     notificationItem.addEventListener("click", async () => {
         try {
-            // Mark as read in Firestore
-            await db.collection("activities").doc(docId).update({ read: true });
+            // Mark the notification as read in Firestore
+            const activityRef = doc(db, "activities", docId);
+            await updateDoc(activityRef, { read: true });
             console.log("Marked as read:", docId);
 
-            // Remove from UI
+            // Remove the notification from the UI
             notificationItem.remove();
+
+            // Update the notification counter
             updateNotificationCounter();
+
+            // Redirect to status.html
+            window.location.href = "status.html";
         } catch (error) {
             console.error("Error updating document:", error);
         }
-
-        // Redirect to status page
-        window.location.href = "status.html";
     });
 
+    // Append to notification list
     notificationList.prepend(notificationItem);
-    updateNotificationCounter();
 }
 
 // Function to update the notification counter
@@ -76,12 +72,13 @@ function updateNotificationCounter() {
     const notificationList = document.getElementById("notificationList");
     if (!notificationCounter || !notificationList) return;
 
-    let count = notificationList.children.length;
+    // Count the number of unread notifications
+    const count = notificationList.children.length;
     if (count > 0) {
         notificationCounter.innerText = count;
-        notificationCounter.style.display = "inline";
+        notificationCounter.style.display = "inline"; // Show the counter
     } else {
-        notificationCounter.style.display = "none";
+        notificationCounter.style.display = "none"; // Hide the counter if no notifications
     }
 }
 
@@ -90,28 +87,37 @@ auth.onAuthStateChanged((user) => {
     if (user) {
         console.log("User signed in:", user.uid); // DEBUGGING
 
-        db.collection("activities")
-            .where("read", "==", false) // Only fetch unread notifications
-            .onSnapshot((snapshot) => {
-                if (snapshot.empty) {
-                    console.log("No unread notifications found.");
-                }
+        // Listen for unread notifications
+        const activitiesRef = collection(db, "activities");
+        const q = query(activitiesRef, where("read", "==", false)); // Only fetch unread notifications
+        onSnapshot(q, (snapshot) => {
+            const notificationList = document.getElementById("notificationList");
+            if (!notificationList) return;
 
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "added") {
-                        console.log("New notification:", change.doc.data()); // DEBUGGING
-                        createNotification(change.doc.data(), change.doc.id);
-                    }
-                });
-            }, (error) => {
-                console.error("Firestore error:", error);
+            // Clear the current list
+            notificationList.innerHTML = "";
+
+            if (snapshot.empty) {
+                console.log("No unread notifications found.");
+                updateNotificationCounter(); // Update counter to 0
+                return;
+            }
+
+            // Add new unread notifications
+            snapshot.forEach((doc) => {
+                createNotification(doc.data(), doc.id);
             });
+
+            // Update the notification counter
+            updateNotificationCounter();
+        }, (error) => {
+            console.error("Firestore error:", error);
+        });
     } else {
         console.log("User not signed in.");
         window.location.href = "/login.html";
     }
 });
-
 
 // Close dropdown when clicking outside
 document.addEventListener("click", function(event) {

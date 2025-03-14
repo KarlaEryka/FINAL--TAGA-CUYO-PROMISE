@@ -17,6 +17,7 @@
 
     <!-- Firebase Auth SDK (compat version) -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script type="module" src="scripts/notification.js"></script>
 
 </head>
 <body>
@@ -74,8 +75,8 @@
         </form>
         <div class="profile">
             <div class="notification-icon" onclick="toggleNotificationDropdown()">
-                <i class='bx bxs-bell'></i>
-                <span id="notificationCounter" class="notification-counter"></span>
+                <i class='bx bxs-bell' style="font-size: 20px;"></i>
+                <span id="notificationCounter" class="notification-counter" style="display: none;"></span>
             </div>
             <div id="notificationDropdown" class="notification-dropdown hidden">
                 <h4></h4>
@@ -95,7 +96,7 @@
         <main>	
             <hr class="custom-line">
             <div class="header-search">
-                <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User Feedback Result</h2>
+                <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User Report</h2>
             </div>
         </hr>
         </main>

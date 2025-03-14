@@ -4,6 +4,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
 // Firebase Firestore SDK (compat version)
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+
 // Your Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAqr7jav_7l0Y7gIhfTklJXnHPzjAYV8f4",
@@ -16,11 +17,10 @@ const firebaseConfig = {
     measurementId: "G-NVSY2HPNX4"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-
-// Exporting the db to use in other files
-export { db,initializeApp,firebaseConfig,app,getAuth,auth
- };
+// Exporting the necessary Firebase instances
+export { db, initializeApp, firebaseConfig, app, getAuth, auth };

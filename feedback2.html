@@ -143,7 +143,9 @@ feedbackRef.get().then((querySnapshot) => {
 
     querySnapshot.forEach((doc) => {
         const feedbackData = doc.data();
-        const timestamp = feedbackData.timestamp ? feedbackData.timestamp.toDate() : "N/A";
+        const timestamp = feedbackData.timestamp && feedbackData.timestamp.toDate
+    ? feedbackData.timestamp.toDate()
+    : new Date(feedbackData.timestamp).toLocaleString();  // Fallback for non-Firebase timestamp
 
         // Create a new row
         const newRow = document.createElement('tr');
@@ -209,5 +211,7 @@ feedbackRef.get().then((querySnapshot) => {
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="scripts/script.js"></script>
     <script type="module" src="scripts/dashboard.js"></script>
+    <script type="module" src="scripts/notification.js"></script>
+
 </body>
 </html>

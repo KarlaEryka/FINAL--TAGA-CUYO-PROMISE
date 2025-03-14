@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script type="module" src="scripts/notification.js"></script>
+    <script type="module" src="scripts/dashboard/dashboard.js"></script>
 
     <link rel="stylesheet" href="CSS/user_support.css">    
     <title>Support and Feedback</title>
@@ -79,8 +81,8 @@
 
         <div class="profile">
             <div class="notification-icon" onclick="toggleNotificationDropdown()">
-                <i class='bx bxs-bell'></i>
-                <span id="notificationCounter" class="notification-counter">0</span>
+                <i class='bx bxs-bell' style="font-size: 20px;"></i>
+                <span id="notificationCounter" class="notification-counter" style="display: none;"></span>
             </div>
             <div id="notificationDropdown" class="notification-dropdown hidden">
                 <h4></h4>
@@ -229,7 +231,6 @@ window.onload = function() {
 
 
       <script src="scripts/script.js"></script>
-      <script type="module" src="scripts/dashboard/dashboard.js"></script>
 
 </section>
 </body>

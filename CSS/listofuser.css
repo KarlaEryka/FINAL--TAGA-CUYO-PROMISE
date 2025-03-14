@@ -37,7 +37,135 @@ a {
 li {
 	list-style: none;
 }
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+}
+/* Notification Counter */
+.notification-counter {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4757; /* Vibrant red */
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+/* Notification Dropdown */
+.notification-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.notification-dropdown.show {
+    display: block;
+}
+
+/* Dropdown Header */
+.notification-dropdown h4 {
+    padding: 16px;
+    margin: 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Notification List */
+.notification-dropdown ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Notification Item */
+.notification-dropdown li {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer; /* Add cursor pointer */
+}
+
+.notification-dropdown li:hover {
+    background-color: #daecfe; /* Light hover effect */
+}
+.notification-dropdown li strong {
+    font-weight: 600;
+    color: #333;
+    display: block; /* Ensure labels are on their own line */
+    margin-bottom: 4px;
+}
+
+.notification-dropdown li p {
+    margin: 0;
+    color: #666;
+}
+
+/* Ensure proper spacing for notification content */
+.notification-dropdown li div {
+    margin-bottom: 8px;
+}
+
+.notification-dropdown li div:last-child {
+    margin-bottom: 0;
+}
+
+/* Notification Content */
+.notification-dropdown li strong {
+    font-weight: 600;
+    color: #333;
+}
+
+.notification-dropdown li p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Animation for Dropdown */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bell Icon Hover Effect */
+.notification-icon:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .notification-dropdown {
+        width: 280px;
+        right: -20px;
+    }
+}
 /* SIDEBAR */
 #sidebar {
 	position: fixed;
