@@ -7,6 +7,8 @@
         <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
         <link rel="stylesheet" href="CSS/status.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
         <title>Status</title>
     </head>
     <body>
@@ -94,7 +96,7 @@
     <main>
         <hr class="custom-line">
                 <div class="header-search">
-                    <h2 style="color: rgb(135, 142, 142);">&nbsp;Learning Features Status</h2>
+                    <h2 style="color: rgb(135, 142, 142);">&nbsp;Learning Feature Status</h2>
                 </div>
             </hr>
             &nbsp;
@@ -125,17 +127,18 @@
     &nbsp;
     &nbsp;
 
-    <div style="max-height: 500px; overflow-y: auto; border: 1px;">
+    <div style="border: 1px solid #ccc;">
         <table id="historyTable" style="width: 100%;">
-            <thead style= "text-align: center;">
+            <thead style="text-align: center;" class="historyTable">
                 <tr>
-                    <th style="text-align: center;">Timestamp</th>
-                    <th style="text-align: center;">Requester</th>
-                    <th style="text-align: center;">Document ID</th>
-                    <th style="text-align: center;">Lesson ID</th>
-                    <th style="text-align: center;">Content Details</th>
-                    <th style="text-align: center;">Requester's Action</th>
-                    <th style="text-align: center;">Admin Action</th>
+                    <th>Timestamp</th>
+                    <th>Requester</th>
+                    <th>Document ID</th>
+                    <th>Lesson ID</th>
+                    <th>Content Details</th>
+                    <th>Requester's Action</th>
+                    <th>Admin Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="historyTableBody">
@@ -143,6 +146,7 @@
             </tbody>
         </table>
     </div>
+    
 
 
     </main>

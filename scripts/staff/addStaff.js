@@ -29,7 +29,6 @@ export const addStaff = () => {
         const lastName = document.getElementById("lastName").value.trim();
         const email = document.getElementById("email").value.trim();
         const birthdate = document.getElementById("birthdate").value;
-        const phoneNumber = document.getElementById("phoneNumber").value.trim();
         const role = document.getElementById("role").value;
         const gender = document.getElementById("gender").value;
 
@@ -66,7 +65,6 @@ export const addStaff = () => {
                 lastName,
                 email,
                 birthdate,
-                phoneNumber: phoneNumber || null,
                 gender,
                 role,
                 isAdmin: role === "admin",

@@ -1,4 +1,4 @@
-import {getDocs,initializeApp,query,collection,db,orderBy } from "./firebase_config.js";
+import { getDocs, query, collection, db, orderBy, deleteDoc, doc, setDoc } from "./firebase_config.js";
 
 async function loadHistory() {
     const historySnapshot = await getDocs(
@@ -11,7 +11,7 @@ async function loadHistory() {
     const historyTableBody = document.getElementById('historyTableBody');
     historyTableBody.innerHTML = '';
 
-    historySnapshot.forEach((historyDoc) => {
+    historySnapshot.forEach((historyDoc) => { // No need for async here
         const data = historyDoc.data();
         const row = document.createElement('tr');
 
@@ -34,10 +34,38 @@ async function loadHistory() {
             <td>${data.contentDetails}</td>
             <td>${data.action}</td>
             <td>${data.adminAction}</td>
+            <td>
+                <button class="delete-btn">
+                    <i class="fas fa-trash-alt"></i> 
+                </button>
+            </td>
         `;
+
+        // Add delete functionality
+        row.querySelector(".delete-btn").addEventListener("click", async () => {
+            try {
+                console.log("Moving document to deleted_history:", historyDoc.id);
+
+                // Move document to "deleted_history" collection
+                await setDoc(doc(db, "deleted_history", historyDoc.id), data);
+                console.log("Document moved to deleted_history:", historyDoc.id);
+
+                // Delete from "history" collection
+                await deleteDoc(doc(db, "history", historyDoc.id));
+                console.log("Document deleted from history:", historyDoc.id);
+
+                // Remove from table after successful deletion
+                row.remove();
+                console.log("Row removed from table:", historyDoc.id);
+
+            } catch (error) {
+                console.error("Error moving document to deleted_history:", error);
+            }
+        });
+
         historyTableBody.appendChild(row);
     });
 }
 
 document.addEventListener("DOMContentLoaded", loadHistory);
-export {loadHistory};
+export { loadHistory };

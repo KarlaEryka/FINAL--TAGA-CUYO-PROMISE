@@ -81,7 +81,6 @@ function updateNotificationCounter() {
         notificationCounter.style.display = "none"; // Hide the counter if no notifications
     }
 }
-
 // Check if the user is signed in
 auth.onAuthStateChanged((user) => {
     if (user) {
@@ -103,9 +102,22 @@ auth.onAuthStateChanged((user) => {
                 return;
             }
 
-            // Add new unread notifications
+            // Convert snapshot to an array of documents
+            const notifications = [];
             snapshot.forEach((doc) => {
-                createNotification(doc.data(), doc.id);
+                notifications.push({ id: doc.id, data: doc.data() });
+            });
+
+            // Sort notifications by timestamp (latest first)
+            notifications.sort((a, b) => {
+                const timestampA = a.data.timestamp?.toDate().getTime() || 0; // Use optional chaining and fallback to 0
+                const timestampB = b.data.timestamp?.toDate().getTime() || 0;
+                return timestampB - timestampA; // Sort in descending order (latest first)
+            });
+
+            // Add sorted notifications to the UI
+            notifications.forEach((notification) => {
+                createNotification(notification.data, notification.id);
             });
 
             // Update the notification counter
@@ -118,7 +130,6 @@ auth.onAuthStateChanged((user) => {
         window.location.href = "/login.html";
     }
 });
-
 // Close dropdown when clicking outside
 document.addEventListener("click", function(event) {
     const dropdown = document.getElementById("notificationDropdown");
