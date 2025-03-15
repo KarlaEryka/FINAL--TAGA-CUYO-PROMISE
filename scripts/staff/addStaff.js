@@ -1,4 +1,4 @@
-import { auth, firestore, database, app,initializeApp } from "./firebaseConfig.js"; // Ensure 'app' is imported
+import { firestore, database, app, auth, getApps, initializeApp } from "./firebase_init.js";
 import { 
     getAuth, 
     createUserWithEmailAndPassword, 
@@ -8,12 +8,21 @@ import { doc, setDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/fi
 import { ref, set } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 import { displayUsers } from "./displayUsers.js";
 
-// ✅ Initialize a secondary Firebase app instance for temporary authentication
-const tempApp = initializeApp(app.options, "TempApp"); // Use the same config as the main app
-const tempAuth = getAuth(tempApp); // Use the secondary app instance
+// ✅ Use a secondary Firebase app instance only for authentication
+const tempApp = getApps().find(a => a.name === "TempApp") || initializeApp(app.options, "TempApp");
+const tempAuth = getAuth(tempApp);
+
+// Store the event listener function in a variable so it can be removed later
+let addStaffHandler;
 
 export const addStaff = () => {
-    document.getElementById("addStaffModal").addEventListener("submit", async (event) => {
+    // Remove the existing event listener if it exists
+    if (addStaffHandler) {
+        document.getElementById("addStaffModal").removeEventListener("submit", addStaffHandler);
+    }
+
+    // Define the event listener function
+    addStaffHandler = async (event) => {
         event.preventDefault();
 
         const firstName = document.getElementById("firstName").value.trim();
@@ -23,7 +32,7 @@ export const addStaff = () => {
         const phoneNumber = document.getElementById("phoneNumber").value.trim();
         const role = document.getElementById("role").value;
         const gender = document.getElementById("gender").value;
-        
+
         const currentAdmin = auth.currentUser;
         if (!currentAdmin) {
             alert("No admin is currently signed in.");
@@ -35,6 +44,7 @@ export const addStaff = () => {
             alert("Admins cannot add other admins. Please select the 'staff' role.");
             return;
         }
+
         try {
             // Check if the user already exists in Firestore
             const userRef = doc(firestore, "admin", email);
@@ -84,5 +94,8 @@ export const addStaff = () => {
             console.error("Error adding user:", error);
             alert(`Failed to add staff/admin: ${error.message}`);
         }
-    });
+    };
+
+    // Add the event listener
+    document.getElementById("addStaffModal").addEventListener("submit", addStaffHandler);
 };

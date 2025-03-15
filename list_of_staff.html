@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href="CSS/staff_list.css">
+    <script type="module" src="scripts/dashboard/dashboard.js"></script>
+
     <title>User Management</title>
 </head>
 <body>
@@ -14,6 +16,9 @@
     <section id="sidebar">
         <a href="#" class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
         <ul class="side-menu">
+            <div id="loading-spinner" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+                <i class='bx bx-loader-circle bx-spin' style="font-size: 50px;"></i>
+            </div>
             <!-- Dashboard Menu -->
             <li id="dashboard-menu"><a href="#"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
             <li class="divider" data-text="main">Main</li>
@@ -49,8 +54,8 @@
             </li>
         
             <!-- Other Menus -->
-            <li id="terms-menu"><a href="terms_and_condition.html"><i class='bx bxs-file icon'></i> Terms and Condition</a></li>
-            <li id="settings-menu"><a href="settings.html"><i class='bx bxs-cog icon'></i> Settings</a></li>
+        <!--   <li id="terms-menu"><a href="terms_and_condition.html"><i class='bx bxs-file icon'></i> Terms and Condition</a></li>-->
+        <li id="settings-menu"><a href="settings.html"><i class='bx bxs-cog icon'></i> Settings</a></li>
         </ul>
     </section>
     <!-- SIDEBAR -->
@@ -116,7 +121,7 @@
                 <label for="role">Role:</label>
                 <select id="role" required>
                     <option value="staff">Staff</option>
-                    <option value="admin" disabled>Admin</option>
+                    <option value="admin">Admin</option>
                 </select>
 
                 <label for="firstName">First Name:</label>
@@ -154,24 +159,6 @@
         import { deleteUserAccount } from "./scripts/staff/deleteUser.js";
         import "./scripts/staff/authHandlers.js";
 
-        // Assuming you have a user object with a role attribute
-        const user = {
-            role: "admin" // or "staff", depending on the logged-in user
-        };
-
-        // Function to control visibility based on role
-        function controlDashboardVisibility() {
-            const dashboardMenu = document.getElementById('dashboard-menu');
-            
-            if (user.role === 'admin') {
-                dashboardMenu.style.display = 'none'; // Hide the dashboard menu for admin
-            } else {
-                dashboardMenu.style.display = 'block'; // Show the dashboard menu for other roles
-            }
-        }
-
-        // Call the function when the page loads
-        document.addEventListener('DOMContentLoaded', controlDashboardVisibility);
 
         /// Event listener for the close button
         document.querySelector(".close-btn").addEventListener("click", () => {
@@ -190,7 +177,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
     <script src="scripts/script.js"></script>
-    <script type="module" src="scripts/dashboard/dashboard.js"></script>
     <script type="module" src="scripts/notification.js"></script>
 </body>
 </html>

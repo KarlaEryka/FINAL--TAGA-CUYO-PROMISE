@@ -1,13 +1,5 @@
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { firebaseConfig } from "./firebase-config.js"; // Import Firebase config
-
-// Check if Firebase app is already initialized
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-const database = getDatabase(app);
+import { auth, database } from "./firebase_init"; // Import initialized Firebase objects
+import { onAuthStateChanged, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 // Function to toggle the visibility of sidebar menus based on the user's role
 function toggleSidebarMenuVisibility(role) {

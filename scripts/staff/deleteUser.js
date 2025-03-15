@@ -1,5 +1,5 @@
 // scripts/staff/deleteUser.js
-import { firestore } from "./firebaseConfig.js";
+import { firestore } from "./firebase_init.js";
 import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { displayUsers } from "./displayUsers.js";
 

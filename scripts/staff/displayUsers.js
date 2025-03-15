@@ -1,7 +1,7 @@
-// scripts/staff/displayUsers.js
-import { firestore, auth } from "./firebaseConfig.js";
-import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { firebaseConfig } from "./firebaseConfig.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { auth, firestore } from "./firebase_init.js";
+import { deleteUserAccount } from "./deleteUser.js";
 
 // Encrypt email for display
 function encryptEmail(email) {
@@ -21,7 +21,7 @@ function encryptEmail(email) {
     return email;
 }
 
-// Display users in the table (excluding admins)
+// Display users in the table
 export async function displayUsers() {
     const adminRef = collection(firestore, "admin");
     const querySnapshot = await getDocs(adminRef);
@@ -30,11 +30,27 @@ export async function displayUsers() {
 
     const currentUser = auth.currentUser;
 
+    // Fetch the current user's role from Firestore
+    const currentUserDoc = await getDocs(collection(firestore, "admin"));
+    let currentUserRole = "staff"; // Default role
+    currentUserDoc.forEach((doc) => {
+        if (doc.data().email === currentUser.email) {
+            currentUserRole = doc.data().role; // Get the role of the current user
+        }
+    });
+
     querySnapshot.forEach((doc) => {
         const adminUser = doc.data();
 
-        // Skip users who have isAdmin set to true
-        if (adminUser.isAdmin) return;
+        // If the current user is an admin, skip superadmins
+        if (currentUserRole === "superadmin" && adminUser.role === "superadmin") {
+            return;
+        }
+
+        // If the current user is a staff, skip admins and superadmins
+        if (currentUserRole === "admin" && (adminUser.role === "admin" || adminUser.role === "superadmin")) {
+            return;
+        }
 
         const encryptedEmail = encryptEmail(adminUser.email);
         const dateJoined = adminUser.createdAt ? adminUser.createdAt.toDate().toLocaleDateString("en-US", {
@@ -49,7 +65,7 @@ export async function displayUsers() {
         const row = `<tr>
             <td>${adminUser.firstName} ${adminUser.lastName}</td>
             <td>${encryptedEmail}</td>
-            <td>Staff</td> <!-- Role is always Staff since Admins are filtered out -->
+            <td>${adminUser.role}</td> <!-- Display the role -->
             <td>${dateJoined}</td>
             <td>${deleteButton}</td>
         </tr>`;
@@ -57,3 +73,15 @@ export async function displayUsers() {
         userTable.innerHTML += row;
     });
 }
+
+// Add event listener for delete buttons
+document.getElementById("staffTable").addEventListener("click", async (event) => {
+    if (event.target.classList.contains("delete-btn")) {
+        const docId = event.target.getAttribute("data-id");
+        const email = event.target.getAttribute("data-email");
+
+        if (confirm(`Are you sure you want to delete the user with email: ${email}?`)) {
+            await deleteUserAccount(docId);
+        }
+    }
+});
