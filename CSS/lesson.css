@@ -28,6 +28,7 @@ html {
 body {
 	background:rgb(235, 239, 241);
 	overflow-x: hidden;
+    height: max-content;
 }
 
 a {
@@ -543,16 +544,22 @@ main .title {
 
 /* Buttons */
 .btn_add {
-    background: #27ae60;
-    padding: 10px 20px;
-    border: none;
+    background-color: #28a745; /* Green color */
     color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 12px 20px;
     border-radius: 5px;
-    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    margin-top: 100px;
+    z-index: 1; /* Lower z-index */
 }
 
+/* Hover effect */
 .btn_add:hover {
-    background: #219150;
+    background-color: #218838; /* Darker green */
 }
 
 /* Modals */
@@ -669,6 +676,8 @@ main .title {
 }
 
 table {
+    margin-top: 60px;
+
     width: 200%;
     border-collapse: collapse;
     background-color: #fff;
@@ -774,7 +783,7 @@ label {
 }
 
 .btn-submit {
-    background-color: rgb(0, 207, 35);
+    background-color: rgb(2, 160, 28);
     color: white;
     border: none;
     padding: 10px 20px;
