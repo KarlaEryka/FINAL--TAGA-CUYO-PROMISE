@@ -31,7 +31,7 @@
             // Event listener for category selection
             filterCategory.addEventListener("change", async () => {
                 const selectedCategory = filterCategory.value;
-                filterSubcategory.innerHTML = '<option value="">All Subcategories</option>';
+                filterSubcategory.innerHTML = '<option value="">Select Subcategory</option>';
                 filterSubcategory.disabled = true;
 
                 if (selectedCategory) {

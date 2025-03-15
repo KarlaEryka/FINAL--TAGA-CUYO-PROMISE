@@ -46,8 +46,9 @@ async function deleteContent(event, categoryId, subcategoryId) {
                 timestamp: serverTimestamp() // Automatically generates timestamp
             });
 
-            // Reload the categories and words table after deletion
-            loadWords();  // This will refresh the table
+            // Reload the words table with the same category and subcategory filters
+            loadWords(categoryId, subcategoryId); // Pass the current categoryId and subcategoryId
+
             alert("Word deleted successfully!");
         } catch (error) {
             console.error("Error deleting content:", error);

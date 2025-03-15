@@ -656,13 +656,13 @@ tbody tr:nth-child(odd) {
 
 .edit-icon {
     cursor: pointer;
-    color: #007bff;
+    color: #ffec1b;
     font-size: 20px;
     transition: 0.3s;
 }
 
 .edit-icon:hover {
-    color: #0056b3;
+    color: #f2ea16;
 }
 
 .save-btn {
