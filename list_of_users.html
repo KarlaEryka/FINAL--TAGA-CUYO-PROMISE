@@ -76,8 +76,6 @@
                 <i class='bx bx-menu toggle-sidebar'></i>
                 <form action="#" id="search-form">
                     <div class="form-group">
-                        <input type="text" placeholder="Search..." id="search-input">
-                        <i class='bx bx-search icon'></i>
                     </div>
                 </form>
             <div class="profile">
@@ -94,7 +92,11 @@
                 <img src="images/logo.png" alt="Profile Image" >
                 <ul class="profile-link">
                     <li><a href="settings.htm"><i class='bx bxs-cog'></i> Settings</a></li>
-                    <li><a href="login.html"><i class='bx bxs-log-out-circle'></i> Logout</a></li>
+                    <li>
+                        <a href="#" id="logoutButton" class="logout-link">
+                            <i class='bx bxs-log-out-circle'></i> Logout
+                        </a>
+                    </li>
                 </ul>
                 </div>
             </nav>
@@ -122,6 +124,7 @@
 <script src="scripts/script.js"></script>
 <script type="module" src="scripts/dashboard/dashboard.js"></script>
 <script type="module" src="scripts/notification.js"></script>
+<script type="module" src="scripts/logout.js"></script>
 
 </body>
 </html>
