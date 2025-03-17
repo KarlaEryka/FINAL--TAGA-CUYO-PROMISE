@@ -10,37 +10,18 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
+
 console.log("Current User (Before Auth Check):", auth.currentUser);
 console.log("User UID:", auth.currentUser ? auth.currentUser.uid : "No user logged in");
 
-async function handleEdit(event) {
+function handleEdit(event) {
     const user = auth.currentUser;
 
     if (!user) {
-        console.error("❌ User is not logged in!");
         alert("You must be logged in to edit categories.");
         return;
     }
 
-    const userRef = doc(db, "admin", user.uid);
-    const userSnap = await getDoc(userRef);
-
-    if (!userSnap.exists()) {
-        console.error("❌ User document not found in Firestore!");
-        alert("Your account does not have the necessary permissions.");
-        return;
-    }
-
-    const userData = userSnap.data();
-    if (userData.role !== "admin" && userData.role !== "superadmin") {
-        console.error("❌ Permission denied! Only admins can edit.");
-        alert("Only administrators can edit categories.");
-        return;
-    }
-
-    console.log("✅ Authenticated Admin:", user.email);
-    
-    // Proceed with edit after authentication
     const button = event.target;
     const row = button.closest("tr");
     const wordId = button.dataset.id;
@@ -54,52 +35,76 @@ async function handleEdit(event) {
 
     console.log("✏️ Editing word:", wordId, "in category:", categoryId);
 
-    // Get the cells (except action buttons)
-    const wordCell = row.cells[0];
-    const translatedCell = row.cells[1];
-    const optionsCell = row.cells[2];
+    // Get the current values from the table
+    const word = row.cells[0].innerText;
+    const translated = row.cells[1].innerText;
+    const options = row.cells[2].innerText;
 
-    // Store original values
-    const word = wordCell.innerText;
-    const translated = translatedCell.innerText;
-    const options = optionsCell.innerText;
+    // Populate the modal fields
+    document.getElementById("editWordId").value = wordId;
+    document.getElementById("editWord").value = word;
+    document.getElementById("editTranslated").value = translated;
+    document.getElementById("editOptions").value = options;
 
-    // Replace text with input fields
-    wordCell.innerHTML = `<input type="text" value="${word}" class="edit-input">`;
-    translatedCell.innerHTML = `<input type="text" value="${translated}" class="edit-input">`;
-    optionsCell.innerHTML = `<input type="text" value="${options}" class="edit-input">`;
+    // Store category and subcategory in dataset for saving
+    document.getElementById("editContentForm").dataset.categoryId = categoryId;
+    document.getElementById("editContentForm").dataset.subcategoryId = subcategoryId;
+    document.getElementById("editContentForm").dataset.rowIndex = row.rowIndex; // ✅ Store row index
 
-    // Change button to "Save"
-    button.innerText = "Save";
-    button.style.backgroundColor = "green";
-    
-    button.removeEventListener("click", handleEdit);
-    button.addEventListener("click", async () => {
-        await saveEdit(row, wordId, categoryId, subcategoryId, button);
-    });
+    // ✅ Show the modal directly (Remove openEditModal)
+    document.getElementById("editContentModal").style.display = "block";
 }
 
-async function saveEdit(row, wordId, categoryId, subcategoryId, button) {
+
+document.getElementById("editContentForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent form from refreshing the page
+
     const user = auth.currentUser;
     if (!user) {
-        console.error("❌ User is not authenticated!");
+        alert("You must be logged in to save changes.");
         return;
     }
 
-    // Get the new values from the input fields
-    const wordInput = row.cells[0].querySelector("input");
-    const translatedInput = row.cells[1].querySelector("input");
-    const optionsInput = row.cells[2].querySelector("input");
+    // Get values from modal
+    const wordId = document.getElementById("editWordId").value;
+    const newWord = document.getElementById("editWord").value.trim();
+    const newTranslated = document.getElementById("editTranslated").value.trim();
+    const newOptions = document.getElementById("editOptions").value.split(",").map(option => option.trim());
 
-    const newWord = wordInput.value;
-    const newTranslated = translatedInput.value;
+    // ✅ Validate inputs (Only allow letters for word & translated fields)
+    const lettersOnly = /^[A-Za-z\s]+$/;
+    if (!lettersOnly.test(newWord) || !lettersOnly.test(newTranslated)) {
+        alert("Only letters are allowed for the word and translated fields.");
+        return;
+    }
 
-    // Convert options input to an array
-    const newOptions = optionsInput.value.split(",").map(option => option.trim());
+    // ✅ Validate options (Ensure they do not contain numbers)
+    const numbersPattern = /\d/;
+    if (newOptions.some(option => numbersPattern.test(option))) {
+        alert("Numbers are not allowed in the options field.");
+        return;
+    }
 
-    console.log("🔍 New Values:", { newWord, newTranslated, newOptions });
+    // Get category and subcategory from dataset
+    const categoryId = event.target.dataset.categoryId;
+    const subcategoryId = event.target.dataset.subcategoryId;
+    const rowIndex = event.target.dataset.rowIndex; // ✅ Retrieve row index
 
-    // 🛠 FIX: Ensure correct reference path
+    if (!wordId || !categoryId) {
+        console.error("❌ Missing required IDs for saving!");
+        return;
+    }
+
+    // ✅ Confirmation prompt
+    const confirmUpdate = confirm(
+        `Are you sure you want to update this word?\n\nWord: ${newWord}\nTranslated: ${newTranslated}\nOptions: ${newOptions.join(", ")}`
+    );
+
+    if (!confirmUpdate) {
+        console.log("🚫 Update canceled by the user.");
+        return; // Stop the function if the user cancels
+    }
+
     let wordRef;
     if (subcategoryId) {
         wordRef = doc(db, "categories", categoryId, "subcategories", subcategoryId, "words", wordId);
@@ -107,51 +112,48 @@ async function saveEdit(row, wordId, categoryId, subcategoryId, button) {
         wordRef = doc(db, "categories", categoryId, "words", wordId);
     }
 
-    console.log("🔄 Updating document path:", wordRef.path);
+    console.log("🔄 Updating document:", wordRef.path);
 
     try {
-        // Update the document in Firestore
+        // Update Firestore document
         await updateDoc(wordRef, {
             word: newWord,
             translated: newTranslated,
-            options: newOptions // Ensure this is an array
+            options: newOptions
         });
 
         console.log("✅ Document successfully updated!");
-        // Log the action in the `history` collection
+
+        // Log the action in Firestore
         await addDoc(collection(db, "history"), {
             action: "Edited a word in category",
             addedBy: user.email,
             adminAction: "Edited content",
             contentDetails: `Word: ${newWord} <br> Translated: ${newTranslated} <br> Options: ${newOptions.join(", ")}`,
             documentId: wordId,
-            lesson_id: categoryId, // Assuming `categoryId` is the lesson ID
-            timestamp: serverTimestamp() // Firestore server timestamp
+            lesson_id: categoryId,
+            timestamp: serverTimestamp()
         });
 
         console.log("📜 Activity logged successfully!");
-        // Revert the row back to display mode
-        row.cells[0].innerText = newWord;
-        row.cells[1].innerText = newTranslated;
-        row.cells[2].innerText = newOptions.join(", "); // Display options as a comma-separated string
 
-        // Change button back to "Edit"
-        button.innerText = "Edit";
-        button.style.backgroundColor = "";
+        // ✅ Update the table row dynamically
+        const table = document.querySelector("table");
+        if (table && rowIndex) {
+            const row = table.rows[rowIndex];
+            row.cells[0].innerText = newWord;
+            row.cells[1].innerText = newTranslated;
+            row.cells[2].innerText = newOptions.join(", ");
+        }
 
-        // Ensure the button is not disabled
-        button.disabled = false; // Explicitly enable the button
-
-        // Re-attach the edit event listener
-        button.removeEventListener("click", saveEdit);
-        button.addEventListener("click", handleEdit);
+        // Close the modal
+        document.getElementById("editContentModal").style.display = "none";
 
     } catch (error) {
         console.error("❌ Error updating document:", error);
-        console.error("Error code:", error.code); // Firebase error code
-        console.error("Error message:", error.message); // Firebase error message
         alert("An error occurred while saving the changes. Please try again.");
     }
-}
+});
+
 
 export { handleEdit };

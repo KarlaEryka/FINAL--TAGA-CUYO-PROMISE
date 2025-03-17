@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, deleteDoc, updateDoc, addDoc, getDoc,serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js"; // ✅ Import only once
+import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js"; // ✅ Import only once
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-storage.js";
 
 // Firebase configuration
@@ -21,4 +21,4 @@ const auth = getAuth(); // ✅ Auth initialized once
 const storage = getStorage(app);
 
 // Export Firebase services
-export { db, collection, getDocs, addDoc, doc, updateDoc, getDoc, storage, ref, uploadBytes, getDownloadURL, auth,deleteDoc, serverTimestamp };
+export { db, collection, getDocs, addDoc, doc, updateDoc, getDoc, storage, ref, uploadBytes, getDownloadURL, auth,deleteDoc, serverTimestamp,onAuthStateChanged };

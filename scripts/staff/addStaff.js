@@ -11,7 +11,8 @@ import { displayUsers } from "./displayUsers.js";
 // ✅ Use a secondary Firebase app instance only for authentication
 const tempApp = getApps().find(a => a.name === "TempApp") || initializeApp(app.options, "TempApp");
 const tempAuth = getAuth(tempApp);
-
+// Function to check if the name contains only letters
+const isValidName = (name) => /^[A-Za-z]+$/.test(name);
 // Store the event listener function in a variable so it can be removed later
 let addStaffHandler;
 
@@ -37,7 +38,11 @@ export const addStaff = () => {
             alert("No admin is currently signed in.");
             return;
         }
-
+        // ✅ Validate name fields
+        if (!isValidName(firstName) || !isValidName(lastName)) {
+            alert("First name and last name should contain only letters.");
+            return;
+}
         // ✅ Validate that the role is not "admin"
         if (role === "admin") {
             alert("Admins cannot add other admins. Please select the 'staff' role.");

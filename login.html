@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- link css  -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="CSS/style.css">
 
     <!-- icons  -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
@@ -38,7 +38,7 @@
                         <span class="label">Password</span>
                         <div class="flex-r input">
                             <input type="password" id="password" placeholder="Password" required>
-                            <i class="fas fa-lock"></i>
+                            <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>                        
                         </div>
                     </div>
 
@@ -73,8 +73,14 @@ const database = getDatabase(app);
 
 // Handle login form submission
 const loginForm = document.getElementById('loginForm');
+const loginButton = document.getElementById('login_submit');
+
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    // Disable the login button
+    loginButton.disabled = true;
+    loginButton.textContent = "Please wait...";
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -117,9 +123,28 @@ loginForm.addEventListener('submit', (e) => {
         })
         .catch((error) => {
             alert("Error: " + error.message);
+        })
+        .finally(() => {
+            // Re-enable the login button after 5 seconds
+            setTimeout(() => {
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }, 5000); // 5000 milliseconds = 5 seconds
         });
 });
+// Toggle password visibility
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
 
+togglePassword.addEventListener('click', () => {
+    // Toggle the input type between "password" and "text"
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+
+    // Toggle the eye icon between "fa-eye-slash" and "fa-eye"
+    togglePassword.classList.toggle('fa-eye-slash');
+    togglePassword.classList.toggle('fa-eye');
+});
 // Forgot Password Functionality
 document.getElementById('forgotPassword').addEventListener('click', (e) => {
     e.preventDefault();
@@ -139,7 +164,6 @@ document.getElementById('forgotPassword').addEventListener('click', (e) => {
             alert('Error: ' + error.message);
         });
 });
-
     </script>
 
     <style>

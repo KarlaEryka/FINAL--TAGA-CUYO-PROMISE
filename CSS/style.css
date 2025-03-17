@@ -1,7 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 
+/* Style for the password toggle button */
+.toggle-password {
+    cursor: pointer;
+    margin-left: 10px;
+    color: #777;
+    font-size: 1rem;
+}
 
+.toggle-password:hover {
+    color: #333;
+}
 *{
     margin: 0px;
     padding: 0px;

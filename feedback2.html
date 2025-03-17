@@ -23,13 +23,13 @@
        
        <!-- SIDEBAR -->
        <section id="sidebar">
-        <a href="#" class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
+        <a class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
         <ul class="side-menu">
             <div id="loading-spinner" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
                 <i class='bx bx-loader-circle bx-spin' style="font-size: 50px;"></i>
             </div>
             <!-- Dashboard Menu -->
-            <li id="dashboard-menu"><a href="#"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
+            <li id="dashboard-menu"><a href="dashboard.html"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
             <li class="divider" data-text="main">Main</li>
 
             <!-- User Management Menu -->
@@ -113,7 +113,7 @@
     <table>
         <thead>
             <tr>
-                <th>User ID</th>
+                <th>Name</th>
                 <th>Ratings</th>
                 <th>What did you like?</th>
                 <th>Comments</th>
@@ -152,67 +152,67 @@
 		// Reference the Firestore feedback collection
 		const feedbackRef = db.collection('feedback');
 	
-// Fetch feedback data and dynamically display it in the table
+/// Fetch feedback data and dynamically display it in the table
 feedbackRef.get().then((querySnapshot) => {
     const tableBody = document.getElementById('tablegroup');
+    tableBody.innerHTML = ''; // Clear table before inserting new data
 
     querySnapshot.forEach((doc) => {
         const feedbackData = doc.data();
-        const timestamp = feedbackData.timestamp && feedbackData.timestamp.toDate
-    ? feedbackData.timestamp.toDate()
-    : new Date(feedbackData.timestamp).toLocaleString();  // Fallback for non-Firebase timestamp
+        
+        // Format timestamp
+        const timestamp = feedbackData.timestamp 
+            ? new Date(feedbackData.timestamp).toLocaleString() 
+            : 'N/A';
 
-        // Create a new row
+        // Mask the name (e.g., "John Doe" → "J***** D*****")
+        const name = feedbackData.name && feedbackData.name.trim() !== '' 
+            ? feedbackData.name.split(' ').map(part => part.charAt(0) + '*'.repeat(part.length - 1)).join(' ')
+            : 'Anonymous';
+
+        // Create new row
         const newRow = document.createElement('tr');
 
-        // Create cells for each field
-        const emailCell = document.createElement('td');
-        let email = feedbackData.userEmail || 'N/A';  // Use userEmail instead of doc.id
-        
-        // Encrypt email by showing only the first 5 characters and replacing the rest with "*****"
-        if (email !== 'N/A') {
-            const emailParts = email.split('@');
-            email = emailParts[0].substring(0, 5) + '*****' + '@' + emailParts[1];
-        }
+        // Name cell
+        const nameCell = document.createElement('td');
+        nameCell.textContent = name;
 
-        emailCell.textContent = email;
-
+        // Rating cell
         const ratingsCell = document.createElement('td');
         ratingsCell.textContent = feedbackData.rating || 'N/A';
 
-        const feedbackCell = document.createElement('td');
-        
         // "What did you like?" section
+        const feedbackCell = document.createElement('td');
         if (feedbackData.selectedOptions && typeof feedbackData.selectedOptions === 'object') {
             const feedbackList = document.createElement('ul');
-            for (const [key, value] of Object.entries(feedbackData.selectedOptions)) {
-                if (value) {
+            Object.keys(feedbackData.selectedOptions).forEach(key => {
+                if (feedbackData.selectedOptions[key]) {
                     const listItem = document.createElement('li');
-                    // Convert underscores to spaces and capitalize words
-                    const readableOption = key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-                    listItem.textContent = readableOption;
+                    listItem.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()); 
                     feedbackList.appendChild(listItem);
                 }
-            }
+            });
             feedbackCell.appendChild(feedbackList.children.length > 0 ? feedbackList : document.createTextNode('No options selected'));
         } else {
             feedbackCell.textContent = 'N/A';
         }
 
+        // Comments cell
         const commentsCell = document.createElement('td');
         commentsCell.textContent = feedbackData.comments || 'N/A';
 
+        // Timestamp cell
         const timestampCell = document.createElement('td');
         timestampCell.textContent = timestamp;
 
-        // Append cells to the row
-        newRow.appendChild(emailCell);  // Use email instead of UID
+        // Append cells to row
+        newRow.appendChild(nameCell);
         newRow.appendChild(ratingsCell);
         newRow.appendChild(feedbackCell);
         newRow.appendChild(commentsCell);
         newRow.appendChild(timestampCell);
 
-        // Append row to the table body
+        // Append row to table
         tableBody.appendChild(newRow);
     });
 }).catch((error) => {

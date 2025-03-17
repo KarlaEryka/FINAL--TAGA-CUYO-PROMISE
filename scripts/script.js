@@ -2,108 +2,42 @@
 const allDropdown = document.querySelectorAll('#sidebar .side-dropdown');
 const sidebar = document.getElementById('sidebar');
 
-allDropdown.forEach(item=> {
-	const a = item.parentElement.querySelector('a:first-child');
-	a.addEventListener('click', function (e) {
-		e.preventDefault();
+allDropdown.forEach(item => {
+    const a = item.parentElement.querySelector('a:first-child');
 
-		if(!this.classList.contains('active')) {
-			allDropdown.forEach(i=> {
-				const aLink = i.parentElement.querySelector('a:first-child');
+    // Ensure this only runs for menu items that have dropdowns
+    if (item) {
+        a.addEventListener('click', function (e) {
+            e.preventDefault();
 
-				aLink.classList.remove('active');
-				i.classList.remove('show');
-			})
-		}
+            // Only toggle menus that have dropdowns
+            if (!this.classList.contains('active')) {
+                allDropdown.forEach(i => {
+                    const aLink = i.parentElement.querySelector('a:first-child');
+                    aLink.classList.remove('active');
+                    i.classList.remove('show');
+                });
+            }
 
-		this.classList.toggle('active');
-		item.classList.toggle('show');
-	})
-})
+            this.classList.toggle('active');
+            item.classList.toggle('show');
+        });
+    }
+});
 
-
-
-
-
-
-
-
-
-
-
-
-// SIDEBAR COLLAPSE
-const toggleSidebar = document.querySelector('nav .toggle-sidebar');
-const allSideDivider = document.querySelectorAll('#sidebar .divider');
-
-if(sidebar.classList.contains('hide')) {
-	allSideDivider.forEach(item=> {
-		item.textContent = '-'
-	})
-	allDropdown.forEach(item=> {
-		const a = item.parentElement.querySelector('a:first-child');
-		a.classList.remove('active');
-		item.classList.remove('show');
-	})
-} else {
-	allSideDivider.forEach(item=> {
-		item.textContent = item.dataset.text;
-	})
-}
-
-toggleSidebar.addEventListener('click', function () {
-	sidebar.classList.toggle('hide');
-
-	if(sidebar.classList.contains('hide')) {
-		allSideDivider.forEach(item=> {
-			item.textContent = '-'
-		})
-
-		allDropdown.forEach(item=> {
-			const a = item.parentElement.querySelector('a:first-child');
-			a.classList.remove('active');
-			item.classList.remove('show');
-		})
-	} else {
-		allSideDivider.forEach(item=> {
-			item.textContent = item.dataset.text;
-		})
-	}
-})
-
-
-
-
-sidebar.addEventListener('mouseleave', function () {
-	if(this.classList.contains('hide')) {
-		allDropdown.forEach(item=> {
-			const a = item.parentElement.querySelector('a:first-child');
-			a.classList.remove('active');
-			item.classList.remove('show');
-		})
-		allSideDivider.forEach(item=> {
-			item.textContent = '-'
-		})
-	}
-})
-
-
-
-sidebar.addEventListener('mouseenter', function () {
-	if(this.classList.contains('hide')) {
-		allDropdown.forEach(item=> {
-			const a = item.parentElement.querySelector('a:first-child');
-			a.classList.remove('active');
-			item.classList.remove('show');
-		})
-		allSideDivider.forEach(item=> {
-			item.textContent = item.dataset.text;
-		})
-	}
-})
-
-
-
+// Prevent the issue where Dashboard is treated like a dropdown menu
+document.querySelectorAll('#sidebar .side-menu > li > a').forEach(menuItem => {
+    menuItem.addEventListener('click', function () {
+        if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('side-dropdown')) {
+            // Ensure only menu items with dropdowns get the toggle behavior
+            allDropdown.forEach(dropdown => {
+                dropdown.classList.remove('show');
+                const parentLink = dropdown.parentElement.querySelector('a:first-child');
+                parentLink.classList.remove('active');
+            });
+        }
+    });
+});
 
 // PROFILE DROPDOWN
 const profile = document.querySelector('nav .profile');

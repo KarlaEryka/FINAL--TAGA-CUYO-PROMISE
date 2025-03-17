@@ -1,5 +1,6 @@
-import { db, collection, getDocs, addDoc, doc, updateDoc, getDoc, storage, ref, uploadBytes, getDownloadURL, auth } from "./firebaseConfig.js";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+import { db, collection, getDocs, addDoc, doc, updateDoc, getDoc, storage, ref, uploadBytes, getDownloadURL,  onAuthStateChanged,auth } from "./firebaseConfig.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+import { serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
 async function uploadImageAndGetURL(file, categoryName, subcategoryName) {
     if (!file) {
@@ -24,6 +25,16 @@ async function uploadImageAndGetURL(file, categoryName, subcategoryName) {
     }
 }
 
+let currentUserEmail = null;
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUserEmail = user.email; // Get the current user's email
+        console.log("Logged-in user:", currentUserEmail);
+    } else {
+        console.log("No user is signed in.");
+    }
+});
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -121,7 +132,6 @@ document.getElementById('addContentForm').addEventListener('submit', async (even
     const file = document.getElementById("imageUpload").files[0];
     const image_path = await uploadImageAndGetURL(file, categoryName, subcategoryName);
 
-
     if (!categoryName || !subcategoryName || !word || !translated) {
         alert("Please fill out all required fields.");
         return;
@@ -154,11 +164,24 @@ document.getElementById('addContentForm').addEventListener('submit', async (even
             return;
         }
 
-        await addDoc(collection(db, `categories/${categoryDocId}/subcategories/${subcategoryDocId}/words`), {
+        const newWordRef = await addDoc(collection(db, `categories/${categoryDocId}/subcategories/${subcategoryDocId}/words`), {
             word,
             translated,
             options,
             image_path,
+        });
+
+        console.log("Content added successfully with ID: ", newWordRef.id);
+
+        // Log the addition activity in Firestore (history collection)
+        await addDoc(collection(db, "history"), {
+            action: "Added a word in category",
+            addedBy: currentUserEmail,
+            adminAction: "Added content",
+            contentDetails: `Word: ${word} <br> Translated: ${translated} <br> Options: ${options.join(", ")}`,
+            documentId: newWordRef.id,
+            lesson_id: categoryDocId,
+            timestamp: serverTimestamp() // Automatically generates timestamp
         });
 
         alert("Content added successfully!");
@@ -166,10 +189,9 @@ document.getElementById('addContentForm').addEventListener('submit', async (even
         document.getElementById('addContentForm').reset();
     } catch (error) {
         console.error("Error adding content:", error);
-        alert("Failed to add content.");
+        alert("Failed to add content. Check console for details.");
     }
 });
-
 
 // Show modal when Add Content button is clicked
 document.getElementById('addContentButton').addEventListener('click', () => {

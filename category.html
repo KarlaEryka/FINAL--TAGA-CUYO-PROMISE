@@ -14,13 +14,13 @@
 <body>
    <!-- SIDEBAR -->
    <section id="sidebar">
-    <a href="#" class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
+    <a class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
     <ul class="side-menu">
         <div id="loading-spinner" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
             <i class='bx bx-loader-circle bx-spin' style="font-size: 50px;"></i>
         </div>
         <!-- Dashboard Menu -->
-        <li id="dashboard-menu"><a href="#"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
+        <li id="dashboard-menu"><a href="dashboard.html"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
         <li class="divider" data-text="main">Main</li>
 
         <!-- User Management Menu -->
@@ -142,7 +142,23 @@
                     </form>
                 </div>
             </div>
-            
+                <div id="editContentModal" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <span class="close-btn" onclick="closeEditModal()">&times;</span>
+                        <h2>Edit Content</h2>
+                        <form id="editContentForm">
+                            <input type="hidden" id="editWordId">
+                            <label for="editWord">Word:</label>
+                            <input type="text" id="editWord" name="word" required>
+                            <label for="editTranslated">Translated:</label>
+                            <input type="text" id="editTranslated" name="translated" required>
+                            <label for="editOptions">Options (comma separated):</label>
+                            <input type="text" id="editOptions" name="options">
+                            <button type="submit" class="btn btn-submit" style="background-color: rgb(0, 165, 11); border:none; padding: 10px 20px; border-radius: 5px; margin-top: 10px;">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+
             <h2>Kategorya</h2>
             <div class="filter-container">
                 <label for="filterCategory">Filter by Category:</label>
@@ -173,7 +189,26 @@
             </table>
         </main>
     </section>       
- 
+    <script>
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById("editContentModal");
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        };
+        
+        // Close modal with ESC key
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                closeEditModal();
+            }
+        });
+        
+        function closeEditModal() {
+            document.getElementById("editContentModal").style.display = "none";
+        }
+        </script>
     <script type="module" src="scripts/category/firebaseConfig.js"></script>
     <script type="module" src="scripts/category/add_content.js"></script>
     <script type="module" src="scripts/category/edit_category.js"></script>

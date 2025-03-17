@@ -147,8 +147,6 @@ async function editWord(lessonId, wordId) {
         alert("Content not found.");
     }
 }
-
-// UPDATE WORD FUNCTION
 async function updateWord(event) {
     event.preventDefault();
 
@@ -160,16 +158,23 @@ async function updateWord(event) {
         .split(",")
         .map(opt => opt.trim())
         .filter(opt => opt !== "");
-        const onlyLettersRegex = /^[A-Za-z\s]+$/;
 
-        if (!onlyLettersRegex.test(word) || !onlyLettersRegex.test(translated)) {
-            alert("Only letters are allowed in the word and translated fields.");
-            return;
-        }
+    // Allow letters, spaces, and special characters
+    const validTextRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s.,'!?()-]+$/;
+
+    if (!validTextRegex.test(word) || !validTextRegex.test(translated)) {
+        alert("Only letters, spaces, and special characters (.,'!?()-) are allowed.");
+        return;
+    }
+
     if (!lessonId || !wordId || !word || !translated || options.length === 0) {
         alert("Please fill out all required fields and provide at least one option.");
         return;
     }
+
+    // Confirmation dialog before proceeding
+    const isConfirmed = confirm("Are you sure you want to update this content?");
+    if (!isConfirmed) return;
 
     try {
         const wordDocRef = doc(db, "lessons", lessonId, "words", wordId);
@@ -183,7 +188,7 @@ async function updateWord(event) {
 
         alert("Content updated successfully!");
 
-        // Log the action in the `history` collection
+        // Log the action in Firestore history
         await addDoc(collection(db, "history"), {
             action: "Edited a lesson",
             addedBy: auth.currentUser.email,
@@ -196,12 +201,17 @@ async function updateWord(event) {
 
         console.log("📜 Activity logged successfully!");
         closeEditModal();
-        loadLessons();
+
+        // ✅ Reload only the filtered lesson's words
+        await loadLessonsAndWords(lessonId);
+
     } catch (error) {
         console.error("Error updating content:", error);
         alert("Failed to update content. Please try again.");
     }
 }
+
+
 
 function closeEditModal() {
     const editModal = document.getElementById('editContentModal');

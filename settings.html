@@ -26,13 +26,13 @@
     
     <!-- SIDEBAR -->
     <section id="sidebar">
-        <a href="#" class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
+        <a class="brand"><img src="images/logo.png" width="70px" height="70px"> TAGA-CUYO</a>
         <ul class="side-menu">
             <div id="loading-spinner" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
                 <i class='bx bx-loader-circle bx-spin' style="font-size: 50px;"></i>
             </div>
             <!-- Dashboard Menu -->
-            <li id="dashboard-menu"><a href="#"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
+            <li id="dashboard-menu"><a href="dashboard.html"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
             <li class="divider" data-text="main">Main</li>
             <!-- User Management Menu -->
             <li id="user-management-menu">
@@ -117,8 +117,6 @@
                             <label>CONTACT INFO</label>
                             <div class="split-input">
                                 <input type="email" id="email" placeholder="Email" readonly>
-                                <input type="tel" id="phoneNumber" placeholder="Phone Number">
-                                <i class='bx bx-edit edit-icon' id="editPhoneIcon"></i>
                             </div>
                         </div>
                         
@@ -180,9 +178,9 @@
                     document.getElementById('firstName').value = adminData.firstName || '';
                     document.getElementById('lastName').value = adminData.lastName || '';
                     document.getElementById('email').value = adminData.email || '';
-                    document.getElementById('gender').value = adminData.gender || '';
+                    document.getElementById('gender').value = adminData.gender ? 
+                        adminData.gender.charAt(0).toUpperCase() + adminData.gender.slice(1).toLowerCase() : '';
                     document.getElementById('birthDate').value = adminData.birthdate || '';
-                    document.getElementById('phoneNumber').value = adminData.phoneNumber || '';
                 }
             } else {
                 console.error('No such document!');
@@ -194,34 +192,6 @@
     });
 });
 
-        document.getElementById('editPhoneIcon').addEventListener('click', () => {
-    const phoneInput = document.getElementById('phoneNumber');
-    const saveBtn = document.getElementById('savePhoneBtn');
-
-    phoneInput.removeAttribute('readonly'); // Enable editing
-    phoneInput.focus();
-    saveBtn.style.display = 'block'; // Show save button
-});
-
-document.getElementById('savePhoneBtn').addEventListener('click', async () => {
-    const newPhone = document.getElementById('phone').value;
-    const admin = auth.currentUser;
-
-    if (admin) {
-        const adminId = admin.uid;
-        const adminRef = doc(db, 'admin', adminId);
-
-        try {
-            await updateDoc(adminRef, { phone: newPhone });
-            alert('Phone number updated successfully!');
-            document.getElementById('phone').setAttribute('readonly', true); // Lock input again
-            document.getElementById('savePhoneBtn').style.display = 'none'; // Hide save button
-        } catch (error) {
-            console.error('Error updating phone number:', error);
-            alert('Failed to update phone number.');
-        }
-    }
-});
 
     </script>
     <script src="scripts/script.js"></script>
