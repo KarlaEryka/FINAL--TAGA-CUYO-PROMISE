@@ -65,7 +65,7 @@
     font-size: 25px;
 }
 .login-text p{
-    font-size: 15px;
+    font-size: 10px;
     color: #000000B2;
 }
 
@@ -113,20 +113,54 @@ input{
     margin-left: 5px;
 }
 
-.btn{
+.btn {
     color: #ffffff;
-    border-radius: 30px;
-    padding: 10px 15px;
-    background: linear-gradient(122.33deg, #68bed1 30.62%, #1E94E9 100%);
-    margin-top: 30px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    transition: all 0.3s linear;
+    border-radius: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #68bed1 20%, #1E94E9 80%);
+    box-shadow: 0 4px 10px rgba(30, 148, 233, 0.3);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin:30px auto 10px;
 }
 
-.btn:hover{
-    transform: translateY(-2px);
+/* Hover effect */
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(30, 148, 233, 0.4);
 }
+
+/* Click effect */
+.btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(30, 148, 233, 0.2);
+}
+
+/* Optional: Animated shine effect */
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -100%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(30deg);
+    transition: all 0.6s ease-in-out;
+}
+
+.btn:hover::after {
+    left: 100%;
+}
+
 .extra-line{
     font-size: 15px;
     font-weight: 600;
