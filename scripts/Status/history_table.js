@@ -11,7 +11,7 @@ async function loadHistory() {
     const historyTableBody = document.getElementById('historyTableBody');
     historyTableBody.innerHTML = '';
 
-    historySnapshot.forEach((historyDoc) => { // No need for async here
+    historySnapshot.forEach((historyDoc) => {
         const data = historyDoc.data();
         const row = document.createElement('tr');
 
@@ -41,20 +41,20 @@ async function loadHistory() {
             </td>
         `;
 
-        // Add delete functionality
+        // Move document to "deleted_history" and delete from "history"
         row.querySelector(".delete-btn").addEventListener("click", async () => {
             try {
                 console.log("Moving document to deleted_history:", historyDoc.id);
 
-                // Move document to "deleted_history" collection
+                // Move document to "deleted_history"
                 await setDoc(doc(db, "deleted_history", historyDoc.id), data);
                 console.log("Document moved to deleted_history:", historyDoc.id);
 
-                // Delete from "history" collection
+                // Delete from "history"
                 await deleteDoc(doc(db, "history", historyDoc.id));
                 console.log("Document deleted from history:", historyDoc.id);
 
-                // Remove from table after successful deletion
+                // Remove row from table
                 row.remove();
                 console.log("Row removed from table:", historyDoc.id);
 
