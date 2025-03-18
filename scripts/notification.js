@@ -26,6 +26,13 @@ function toggleNotificationDropdown() {
 // Attach to the window object for global access
 window.toggleNotificationDropdown = toggleNotificationDropdown;
 
+// Function to format timestamp
+function formatTimestamp(timestamp) {
+    if (!timestamp) return "Unknown time";
+    const date = timestamp.toDate();
+    return date.toLocaleString(); // Format to readable date-time string
+}
+
 // Function to create a notification
 function createNotification(activity, docId) {
     console.log("Creating notification:", activity); // DEBUGGING
@@ -35,6 +42,7 @@ function createNotification(activity, docId) {
 
     const notificationItem = document.createElement("li");
     notificationItem.innerHTML = `
+        <div><strong>Time:</strong> ${formatTimestamp(activity.timestamp)}</div>
         <div><strong>Action:</strong> ${activity.action}</div>
         <div><strong>Added By:</strong> ${activity.addedBy}</div>
         <div><strong>Location:</strong> ${activity.location}</div>
@@ -62,7 +70,7 @@ function createNotification(activity, docId) {
         }
     });
 
-    // Append to notification list
+    // Append to notification list (most recent first)
     notificationList.prepend(notificationItem);
 }
 
@@ -81,6 +89,7 @@ function updateNotificationCounter() {
         notificationCounter.style.display = "none"; // Hide the counter if no notifications
     }
 }
+
 // Check if the user is signed in
 auth.onAuthStateChanged((user) => {
     if (user) {
@@ -130,6 +139,7 @@ auth.onAuthStateChanged((user) => {
         window.location.href = "/login.html";
     }
 });
+
 // Close dropdown when clicking outside
 document.addEventListener("click", function(event) {
     const dropdown = document.getElementById("notificationDropdown");

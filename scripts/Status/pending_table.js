@@ -1,6 +1,6 @@
 import { getDocs, initializeApp, query, where, collection, db, setDoc, orderBy, doc, getDoc, deleteDoc, updateDoc, addDoc, serverTimestamp } from "./firebase_config.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-storage.js";
-import { approveEdit } from "./edit_content.js";
+import { approveEdit,approveCategoryEdit } from "./edit_content.js";
 const storage = getStorage();
 
 let pendingContentCache = [];
@@ -83,13 +83,21 @@ async function loadPendingContent() {
                     `; //ANGEL MAE GABAYAN --- from actionButtons = ' to pababa
                     
                 } else if (data.action.includes('Edited') && data.wordId) {
-                    actionButtons = `
-                        <button class="edit-btn" data-doc-id="${docId}" data-word-id="${data.wordId}" onclick="approveEdit('${docId}', '${data.wordId}')">Edit</button>
-                        ${actionButtons}
-                    `;
+                    if (data.location === "lesson") {
+                        actionButtons = `
+                            <button class="edit-btn" data-doc-id="${docId}" data-word-id="${data.wordId}" data-location="${data.location}" 
+                                onclick="approveEdit('${docId}', '${data.wordId}', '${data.location}')">Edit</button>
+                            ${actionButtons}
+                        `;
+                    } else if (data.action.includes('Edited') && data.wordId && data.location === "category") {
+                        actionButtons = `
+                            <button class="edit-btn" data-doc-id="${docId}" data-word-id="${data.wordId}" data-location="${data.location}"
+                                onclick="approveCategoryEdit('${docId}', '${data.wordId}', '${data.categoryId}', '${data.subcategoryId}')">Edit</button>
+                            ${actionButtons}
+                        `;
+                    }
                 }
             }
-
             const formattedTimestamp = data.timestamp ? data.timestamp.toDate().toLocaleString() : 'No timestamp';
             let imagePath = await getImageURL(data.image_path);
 
@@ -115,7 +123,6 @@ async function loadPendingContent() {
         console.error("Error loading pending content:", error);
     }
 }
-
 // LESSON DELETION
 window.deleteLessonContent = async function (docId) {
     // Confirmation dialog

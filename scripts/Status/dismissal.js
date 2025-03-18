@@ -36,13 +36,13 @@ window.dismissContent = async function (docId) {
     // Extract key data for searching in activities
     const { word, translated, addedBy } = searchCriteria;
 
-    // **Find matching document in `activities`**
     const activitiesQuery = query(
         collection(db, 'activities'),
-        where("word", "==", word || null),
-        where("translated", "==", translated || null),
-        where("addedBy", "==", addedBy || null)
+        where("word", "==", word?.trim()),  // Remove `toLowerCase()`
+        where("translated", "==", translated?.trim()), 
+        where("addedBy", "==", addedBy?.trim())
     );
+    
     
     const activitiesSnapshot = await getDocs(activitiesQuery);
     let activitiesDocRef, activitiesDocData;
