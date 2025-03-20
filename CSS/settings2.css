@@ -26,9 +26,18 @@ html {
 }
 
 body {
-	background:rgb(235, 239, 241);
-	overflow-x: hidden;
+    background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
+    background-size: 400% 400%;
+    animation: gradientBG 8s ease infinite;
+    overflow-x: hidden;
 }
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 
 a {
 	text-decoration: none;
@@ -295,7 +304,14 @@ nav .divider {
 	background: var(--grey);
 	height: 12px;
 	display: block;
+}/* Style the parent container to use Flexbox */
+.profile {
+    position: relative;
+    display: flex;
+    align-items: center; /* Aligns items vertically centered */
+    gap: 10px; /* Adds space between the items */
 }
+
 .notification-icon {
     position: relative;
     cursor: pointer;
@@ -319,7 +335,7 @@ nav .divider {
     position: absolute;
     top: 50px;
     right: 0;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -360,12 +376,13 @@ nav .divider {
     border-bottom: 1px solid #eee;
     transition: background-color 0.2s ease;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1;
     cursor: pointer; /* Add cursor pointer */
 }
 
 .notification-dropdown li:hover {
-    background-color: #daecfe; /* Light hover effect */
+    background-color: #4ca2cd; 
+    color: #e4e4e4;
 }
 .notification-dropdown li strong {
     font-weight: 600;
@@ -425,6 +442,7 @@ nav .divider {
         right: -20px;
     }
 }
+
 /* Style the parent container to use Flexbox */
 .profile {
     position: relative;
@@ -508,179 +526,92 @@ h2 {
     border-bottom: 2px solid #e0e0e0;
     margin-bottom: 20px;
 }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-thead {
-    background-color: #f0f4ff;
-	text-align: center;
-}
-
-th, td {
-    padding: 15px;
-    text-align: center;
-}
-
-td {
-    background-color: #fff;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-td:first-child {
-    display: flex;
-    align-items: center;
-}
-
-.user-icon {
-    width: 30px;
-    height: 30px;
-    background-color: #c3dafc;
-    border-radius: 50%;
-    margin-right: 15px;
-}
-
-.user-details p {
-    margin: 0;
-}
-
-.email {
-    color: #888;
-    font-size: 0.9em;
-}
-
-tbody tr:nth-child(odd) {
-    background-color: #f7f9ff;
-}
-.side-dropdown {
-    display: none; /* Hide dropdowns by default */
-}
-
-.side-dropdown.show {
-    display: block; /* Show dropdown when toggled */
-}
-
-.profile-link {
-    display: none; /* Hide profile link by default */
-}
-
-.profile-link.show {
-    display: block; /* Show profile links when toggled */
-}
-.center{
-	text-align: center;
-}
-
-
-.form-container {
-    background-color: #f7faff;
-    border: 3px solid #dde4ed;
-    border-radius: 20px;
-    padding: 30px;
-    width: 600px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	float: center;
-}
-
-.profile-header {
+.profile-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: linear-gradient(135deg, #5babd2, #c7d9e5);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    width: 480px;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-
-.name {
-    font-size: 1.5em;
-    margin-bottom: 5px;
-    color: #333;
+.profile-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 50%);
+    animation: floatingGlow 6s infinite linear;
 }
 
-.title {
-    color: gray;
-    font-size: 0.9em;
+@keyframes floatingGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media screen and (max-width: 768px) {
+    .profile-container {
+        width: 90%;
+    }
+}
+
+.form-container {
+	width: 100%;
+	background: rgba(255, 255, 255, 0.2);
+	padding: 20px;
+	border-radius: 10px;
+	backdrop-filter: blur(12px);
 }
 
 .profile-form {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 }
 
 .input-group {
-    margin-bottom: 20px;
-    position: relative;
+	display: flex;
+	flex-direction: column;
+	text-align: left;
 }
 
 .input-group label {
-    font-size: 0.9em;
-    color: #555;
-    display: block;
-    margin-bottom: 5px;
+	font-size: 0.9em;
+	color: #323232;
+	margin-bottom: 5px;
+	font-weight: bold;
 }
 
 .split-input {
-    display: flex;
-    gap: 10px;
+	display: flex;
+	gap: 10px;
 }
 
-.split-input input {
-    width: 100%;
-}
-
-.input-group input {
+input {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #a5c1e0;
-    border-radius: 5px;
-    font-size: 0.9em;
-    background-color: #d9e4f2;
-}
-
-.half-input {
-    width: 100%;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #609dd4;
-}
-
-.editable-field {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.edit-icon {
-    cursor: pointer;
-    color: #ffec1b;
-    font-size: 20px;
-    transition: 0.3s;
-}
-
-.edit-icon:hover {
-    color: #f2ea16;
-}
-
-.save-btn {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-    display: none; /* Initially hidden */
+    font-size: 1em;
+    background: rgba(255, 255, 255, 0.3);
+    color: rgb(73, 72, 72);
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.save-btn:hover {
-    background-color: #0056b3;
+input:focus {
+	outline: none;
+	background: rgba(255, 255, 255, 0.4);
 }
-
 
 @media screen and (max-width: 768px) {
 	#content {
