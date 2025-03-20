@@ -1,134 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
-.notification-icon {
-    position: relative;
-    cursor: pointer;
-}
-/* Notification Counter */
-.notification-counter {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #ff4757; /* Vibrant red */
-    color: white;
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.notification-dropdown {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    max-height: 400px;
-    overflow-y: auto;
-    display: none;
-    z-index: 1000; /* Higher z-index */
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.notification-dropdown.show {
-    display: flex;
-}
-
-/* Dropdown Header */
-.notification-dropdown h4 {
-    padding: 16px;
-    margin: 0;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e0e0e0;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    border-radius: 8px 8px 0 0;
-}
-
-/* Notification List */
-.notification-dropdown ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Notification Item */
-.notification-dropdown li {
-    padding: 12px 16px;
-    border-bottom: 1px solid #eee;
-    transition: background-color 0.2s ease;
-    font-size: 14px;
-    line-height: 1.5;
-    cursor: pointer; /* Add cursor pointer */
-}
-
-.notification-dropdown li:hover {
-    background-color: #daecfe; /* Light hover effect */
-}
-.notification-dropdown li strong {
-    font-weight: 600;
-    color: #333;
-    display: block; /* Ensure labels are on their own line */
-    margin-bottom: 4px;
-}
-
-.notification-dropdown li p {
-    margin: 0;
-    color: #666;
-}
-
-/* Ensure proper spacing for notification content */
-.notification-dropdown li div {
-    margin-bottom: 8px;
-}
-
-.notification-dropdown li div:last-child {
-    margin-bottom: 0;
-}
-
-/* Notification Content */
-.notification-dropdown li strong {
-    font-weight: 600;
-    color: #333;
-}
-
-.notification-dropdown li p {
-    margin: 4px 0;
-    font-size: 14px;
-    color: #666;
-}
-
-/* Animation for Dropdown */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Bell Icon Hover Effect */
-.notification-icon:hover {
-    cursor: pointer;
-    opacity: 0.9;
-}
-
-/* Responsive Design */
-@media (max-width: 480px) {
-    .notification-dropdown {
-        width: 280px;
-        right: -20px;
-        height: 100%;
-    }
-}
-
 * {
 	font-family: 'Open Sans', sans-serif;
 	margin: 0;
@@ -154,9 +24,17 @@ html {
 }
 
 body {
-	background:rgb(235, 239, 241);
-	overflow-x: hidden;
+	background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
+    background-size: 400% 400%;
+    animation: gradientBG 8s ease infinite;
+    overflow-x: hidden;
 }
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 
 a {
 	text-decoration: none;
@@ -339,25 +217,15 @@ li {
   
 /* SIDEBAR */
 
-
-/* CONTENT */
-#content {
-	position: relative;
-	width: calc(100% - 260px);
-	left: 260px;
-	transition: all .3s ease;
-    min-height: 100vh; /* Ensures content fills the full viewport height */
-
-}
 #sidebar.hide + #content {
 	width: calc(100% - 60px);
 	left: 60px;
 }
 /* NAVBAR */
 nav {
-	background: var(--light);
+    background: #ffffff;
 	height: 64px;
-	padding: 0px;
+	padding: 0 20px;
 	display: flex;
 	align-items: center;
 	grid-gap: 28px;
@@ -434,6 +302,136 @@ nav .divider {
     gap: 10px; /* Adds space between the items */
 }
 
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+}
+/* Notification Counter */
+.notification-counter {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4757; /* Vibrant red */
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Notification Dropdown */
+.notification-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.notification-dropdown.show {
+    display: block;
+}
+
+/* Dropdown Header */
+.notification-dropdown h4 {
+    padding: 16px;
+    margin: 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Notification List */
+.notification-dropdown ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Notification Item */
+.notification-dropdown li {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer; /* Add cursor pointer */
+}
+
+.notification-dropdown li:hover {
+    background-color: #4ca2cd; 
+    color: #e4e4e4;
+}
+.notification-dropdown li strong {
+    font-weight: 600;
+    color: #333;
+    display: block; /* Ensure labels are on their own line */
+    margin-bottom: 4px;
+}
+
+.notification-dropdown li p {
+    margin: 0;
+    color: #666;
+}
+
+/* Ensure proper spacing for notification content */
+.notification-dropdown li div {
+    margin-bottom: 8px;
+}
+
+.notification-dropdown li div:last-child {
+    margin-bottom: 0;
+}
+
+/* Notification Content */
+.notification-dropdown li strong {
+    font-weight: 600;
+    color: #333;
+}
+
+.notification-dropdown li p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Animation for Dropdown */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bell Icon Hover Effect */
+.notification-icon:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .notification-dropdown {
+        width: 280px;
+        right: -20px;
+    }
+}
 /* Profile image styling */
 .profile img {
     width: 36px;
@@ -441,7 +439,6 @@ nav .divider {
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-    margin-right: 50px;
 }
 
 /* Profile link */
@@ -478,6 +475,7 @@ nav .profile .profile-link a {
 nav .profile .profile-link a:hover {
     background: var(--grey);
 }
+
 /* NAVBAR */
 
 /* MAIN */
@@ -491,7 +489,15 @@ main .title {
 	font-weight: 600;
 	margin-bottom: 10px;
 }
+/* CONTENT */
+#content {
+	position: relative;
+	width: calc(100% - 260px);
+	left: 260px;
+	transition: all .3s ease;
+    min-height: 100vh; /* Ensures content fills the full viewport height */
 
+}
 @media screen and (max-width: 68px) {}
 .custom-line {
     border: none;               /* Remove default border */
@@ -561,54 +567,33 @@ main .title {
     background-color: #218838;
    
 }
-
 table {
     margin-top: 60px;
     width: 200%;
     border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: 100%;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-table th {
+table th, table td {
     padding: 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
 table th {
-    background-color: #f8f9fa;
+    background-color: #5babd2;
+    color: white;
     font-weight: bold;
-	width: 5000px;
+    text-align: center;
 }
 
 table tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #eaf5fc;
 }
 
-.reset-btn, .delete-btn {
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.reset-btn {
-    background-color: #007bff;
-    color: white;
-    margin-right: 10px;
-}
-
-.reset-btn:hover {
-    background-color: #0056b3;
-}
 
 .delete-btn {
     background-color: #dc3545;
@@ -749,7 +734,7 @@ label {
 
 /* Button Styling */
 .btn-submit {
-    background-color: rgb(0, 207, 35);
+    background-color:  #28a745;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -760,12 +745,10 @@ label {
 }
 
 .btn-submit:hover {
-    background-color: rgb(26, 200, 38);
+    background-color:#218838;
 }
-/* Style the "Add Content" button */
 .btn_add {
-    background-color: #28a745; /* Green color */
-    color: white;
+    background-color: #28a745;
     font-size: 16px;
     font-weight: bold;
     border: none;
@@ -777,11 +760,10 @@ label {
     z-index: 1; /* Lower z-index */
 }
 
-/* Hover effect */
 .btn_add:hover {
-    background-color: #218838; /* Darker green */
+    background-color:  #218838;
+    transform: scale(1.05);
 }
-
 /* Ensure it stays responsive */
 @media screen and (max-width: 768px) {
     .btn_add {
@@ -889,7 +871,7 @@ label {
 }
 
 .filter-dropdown:focus {
-    border-color: #007bff;
+    border-color: #4ca2cd;
     background: #fff;
 }
 

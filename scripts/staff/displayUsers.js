@@ -21,6 +21,18 @@ function encryptEmail(email) {
     return email;
 }
 
+// Encrypt name by showing only the first and last letter (with the first letter capitalized)
+// and masking the middle characters with asterisks
+function encryptName(name) {
+    if (!name || name.length <= 2) return name;
+    // Convert the name to proper case: first letter capitalized, rest in lowercase
+    name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    const firstLetter = name.charAt(0);
+    const lastLetter = name.charAt(name.length - 1);
+    const masked = '*'.repeat(name.length - 2);
+    return firstLetter + masked + lastLetter;
+}
+
 // Display users in the table
 export async function displayUsers() {
     const adminRef = collection(firestore, "admin");
@@ -42,12 +54,12 @@ export async function displayUsers() {
     querySnapshot.forEach((doc) => {
         const adminUser = doc.data();
 
-        // If the current user is an admin, skip superadmins
+        // If the current user is a superadmin, skip superadmins
         if (currentUserRole === "superadmin" && adminUser.role === "superadmin") {
             return;
         }
 
-        // If the current user is a staff, skip admins and superadmins
+        // If the current user is an admin, skip admins and superadmins
         if (currentUserRole === "admin" && (adminUser.role === "admin" || adminUser.role === "superadmin")) {
             return;
         }
@@ -62,10 +74,14 @@ export async function displayUsers() {
         const isCurrentUser = currentUser && currentUser.email === adminUser.email;
         const deleteButton = `<button class="delete-btn" data-id="${doc.id}" data-email="${adminUser.email}" ${isCurrentUser ? "disabled" : ""}>Delete</button>`;
 
+        // Encrypt and capitalize the first and last names
+        const encryptedFirstName = encryptName(adminUser.firstName);
+        const encryptedLastName = encryptName(adminUser.lastName);
+
         const row = `<tr>
-            <td>${adminUser.firstName} ${adminUser.lastName}</td>
+            <td>${encryptedFirstName} ${encryptedLastName}</td>
             <td>${encryptedEmail}</td>
-            <td>${adminUser.role}</td> <!-- Display the role -->
+            <td>${adminUser.role}</td>
             <td>${dateJoined}</td>
             <td>${deleteButton}</td>
         </tr>`;

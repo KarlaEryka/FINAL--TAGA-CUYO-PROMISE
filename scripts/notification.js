@@ -9,6 +9,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+let unreadCount = 0; // Track unread notifications
+
 // Toggle notification dropdown
 function toggleNotificationDropdown() {
     const dropdown = document.getElementById("notificationDropdown");
@@ -28,7 +30,7 @@ window.toggleNotificationDropdown = toggleNotificationDropdown;
 
 // Function to format timestamp
 function formatTimestamp(timestamp) {
-    if (!timestamp) return "Unknown time";
+    if (!timestamp || !timestamp.toDate) return "Unknown time";
     const date = timestamp.toDate();
     return date.toLocaleString(); // Format to readable date-time string
 }
@@ -47,7 +49,7 @@ function createNotification(activity, docId) {
         <div><strong>Added By:</strong> ${activity.addedBy}</div>
         <div><strong>Location:</strong> ${activity.location}</div>
     `;
-    notificationItem.style.cursor = "pointer"; 
+    notificationItem.style.cursor = "pointer";
 
     // On click, mark as read & remove from the UI
     notificationItem.addEventListener("click", async () => {
@@ -61,6 +63,7 @@ function createNotification(activity, docId) {
             notificationItem.remove();
 
             // Update the notification counter
+            unreadCount--;
             updateNotificationCounter();
 
             // Redirect to status.html
@@ -72,18 +75,19 @@ function createNotification(activity, docId) {
 
     // Append to notification list (most recent first)
     notificationList.prepend(notificationItem);
+
+    // Update unread count
+    unreadCount++;
+    updateNotificationCounter();
 }
 
 // Function to update the notification counter
 function updateNotificationCounter() {
     const notificationCounter = document.getElementById("notificationCounter");
-    const notificationList = document.getElementById("notificationList");
-    if (!notificationCounter || !notificationList) return;
+    if (!notificationCounter) return;
 
-    // Count the number of unread notifications
-    const count = notificationList.children.length;
-    if (count > 0) {
-        notificationCounter.innerText = count;
+    if (unreadCount > 0) {
+        notificationCounter.innerText = unreadCount;
         notificationCounter.style.display = "inline"; // Show the counter
     } else {
         notificationCounter.style.display = "none"; // Hide the counter if no notifications
@@ -104,6 +108,7 @@ auth.onAuthStateChanged((user) => {
 
             // Clear the current list
             notificationList.innerHTML = "";
+            unreadCount = 0; // Reset unread count
 
             if (snapshot.empty) {
                 console.log("No unread notifications found.");
@@ -128,9 +133,6 @@ auth.onAuthStateChanged((user) => {
             notifications.forEach((notification) => {
                 createNotification(notification.data, notification.id);
             });
-
-            // Update the notification counter
-            updateNotificationCounter();
         }, (error) => {
             console.error("Firestore error:", error);
         });

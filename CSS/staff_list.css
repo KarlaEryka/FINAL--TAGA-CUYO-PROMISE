@@ -25,11 +25,6 @@ html {
 	overflow-x: hidden;
 }
 
-body {
-	background: var(--grey);
-	overflow-x: hidden;
-}
-
 a {
 	text-decoration: none;
 }
@@ -37,12 +32,6 @@ a {
 li {
 	list-style: none;
 }
-
-
-
-
-
-
 
 /* SIDEBAR */
 #sidebar {
@@ -207,7 +196,7 @@ li {
 }
 /* NAVBAR */
 nav {
-	background: var(--light);
+    background: #ffffff;
 	height: 64px;
 	padding: 0 20px;
 	display: flex;
@@ -278,6 +267,13 @@ nav .divider {
 	height: 12px;
 	display: block;
 }
+/* Style the parent container to use Flexbox */
+.profile {
+    position: relative;
+    display: flex;
+    align-items: center; /* Aligns items vertically centered */
+    gap: 10px; /* Adds space between the items */
+}
 
 .notification-icon {
     position: relative;
@@ -302,7 +298,7 @@ nav .divider {
     position: absolute;
     top: 50px;
     right: 0;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -343,12 +339,13 @@ nav .divider {
     border-bottom: 1px solid #eee;
     transition: background-color 0.2s ease;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1;
     cursor: pointer; /* Add cursor pointer */
 }
 
 .notification-dropdown li:hover {
-    background-color: #daecfe; /* Light hover effect */
+    background-color: #4ca2cd; 
+    color: #e4e4e4;
 }
 .notification-dropdown li strong {
     font-weight: 600;
@@ -408,14 +405,6 @@ nav .divider {
         right: -20px;
     }
 }
-/* Style the parent container to use Flexbox */
-.profile {
-    position: relative;
-    display: flex;
-    align-items: center; /* Aligns items vertically centered */
-    gap: 10px; /* Adds space between the items */
-}
-
 /* Profile image styling */
 .profile img {
     width: 36px;
@@ -423,7 +412,6 @@ nav .divider {
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-	margin-right: 50px;
 }
 
 /* Profile link */
@@ -461,83 +449,188 @@ nav .profile .profile-link a:hover {
     background: var(--grey);
 }
 
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .notification-dropdown {
+        width: 280px;
+        right: -20px;
+    }
+}
+
 /* NAVBAR */
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
+    background-size: 400% 400%;
+    animation: gradientBG 8s ease infinite;
+    overflow-x: hidden;
 }
 
-.add-btn {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
+:root {
+    --primary-green: #28a745;
+    --primary-green-hover: #218838;
+    --primary-blue: #2730e3;
+    --primary-blue-hover: #1239fa;
+    --danger-red: #dc3545;
+    --danger-red-hover: #c82333;
+    --light-gray: #f8f9fa;
+    --border-color: #ddd;
+    --font-size-base: 16px;
+    --padding-base: 10px;
+    --transition-speed: 0.3s;
+    --header-bg: #5babd2;
+    --alt-row-bg: #c7d9e5;
+  }
+  
+  body {
+    background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
+    background-size: 400% 400%;
+    animation: gradientBG 8s ease infinite;
+    overflow-x: hidden;
+  }
+  
+  .add-btn {
+    background-color: var(--primary-green);
+    color: #fff;
+    padding: var(--padding-base) 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: var(--font-size-base);
     margin-bottom: 20px;
-    
-	position:static;
-   
-}
-
-.add-btn:hover {
-    background-color: #218838;
-   
-}
-
-table {
+    position: static;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .add-btn:hover {
+    background-color: var(--primary-green-hover);
+  }
+  
+  /* Table Styling */
+  table {
     width: 200%;
+    max-width: 200%;
+    margin: 20px auto;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-table th, table td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-table th {
-    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  table th,
+  table td {
+    padding: 12px 15px;
+    text-align: center; /* Center text in both header and cells */
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  table th {
+    background-color: var(--header-bg);
+    color: #fff;
     font-weight: bold;
-	width: 500px;
-}
-
-.reset-btn, .delete-btn {
+  }
+  
+  /* Alternating Row Colors */
+  table tbody tr:nth-child(even) {
+    background-color: var(--alt-row-bg);
+  }
+  
+  table tbody tr:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  /* Hover Effect */
+  table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Reset & Delete Buttons */
+  .reset-btn,
+  .delete-btn {
     border: none;
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-}
-
-.reset-btn {
-    background-color: #2730e3;
-    color: white;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .reset-btn {
+    background-color: var(--primary-blue);
+    color: #fff;
     margin-right: 10px;
-}
-
-.reset-btn:hover {
-    background-color: #1239fa;
-}
-
-.delete-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
-}
-@media screen and (max-width: 768px) {
-    th, td {
-        font-size: 10px; /* Reduce font size for smaller screens */
-        padding: 1px; /* Adjust padding */
+  }
+  
+  .reset-btn:hover {
+    background-color: var(--primary-blue-hover);
+  }
+  
+  .delete-btn {
+    background-color: var(--danger-red);
+    color: #fff;
+  }
+  
+  .delete-btn:hover {
+    background-color: var(--danger-red-hover);
+  }
+  
+  /* Responsive Table for Small Devices */
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
     }
-}/* MAIN */
+    
+    thead {
+      display: none;
+    }
+    
+    tbody tr {
+      margin-bottom: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    
+    td {
+      padding: 10px;
+      text-align: right;
+      position: relative;
+    }
+    
+    td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      width: 50%;
+      padding-right: 10px;
+      font-weight: bold;
+      text-align: left;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    th, td {
+      font-size: 10px;
+      padding: 1px;
+    }
+  }
+  
+  /* Optional: Background Animation Keyframes */
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+/* MAIN */
 main {
 	width: 50%;
 	padding: 24px 20px 20px 20px;

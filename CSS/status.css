@@ -26,9 +26,10 @@ html {
 }
 
 body {
-	background: var(--grey);
-	overflow-x: hidden;
-    height: 100%;
+ background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
+    background-size: 400% 400%;
+    animation: gradientBG 8s ease infinite;
+    overflow-x: hidden;
 }
 
 a {
@@ -304,7 +305,7 @@ nav .divider {
     position: absolute;
     top: 50px;
     right: 0;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -345,12 +346,13 @@ nav .divider {
     border-bottom: 1px solid #eee;
     transition: background-color 0.2s ease;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1;
     cursor: pointer; /* Add cursor pointer */
 }
 
 .notification-dropdown li:hover {
-    background-color: #daecfe; /* Light hover effect */
+    background-color: #4ca2cd; 
+    color: #e4e4e4;
 }
 .notification-dropdown li strong {
     font-weight: 600;
@@ -383,24 +385,6 @@ nav .divider {
     margin: 4px 0;
     font-size: 14px;
     color: #666;
-}
-
-/* Animation for Dropdown */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Bell Icon Hover Effect */
-.notification-icon:hover {
-    cursor: pointer;
-    opacity: 0.9;
 }
 
 /* Responsive Design */
@@ -524,20 +508,36 @@ main .title {
         padding: 188px; /* Adjust padding on smaller screens */
     }
 }
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  } 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    border-radius: 5px;
+  }
 table th, table td {
     
-    text-align: left;
+    text-align: center;
    
 }
 
 table th {
-    background-color: #7a879b;
+    background-color: #5babd2;
     color: #fff;
-    font-size: 16px;
+    font-size: 16px;    
+    
 }
 
 table td {
-    color: #333;
+    color: #5e1616;
     font-size: 14px;
 }
 
@@ -633,12 +633,12 @@ table td {
     }
 }
 #historyTable thead {
-    position: static;
     top: 0;
-    background-color: rgb(93, 141, 214); 
-    z-dashboard: 1; /* Ensures the header stays above the content when scrolling */
-	text-align: center;
-}
+    background-color: rgb(93, 141, 214);
+    z-index: 1;
+    text-align: center;
+  }
+
 #historyTableBody {
 	font-style: var(--light);
 }
@@ -647,10 +647,25 @@ table td {
     height: auto !important;
 }
 /* Remove background from Action column */
-#historyTable td:last-child{
-    background-color: white !important; /* Ensures it has no background */
-}
-
+#historyTable td:last-child {
+    background-color: #e2e1e1 !important;
+    border-left: 2px solid #ccc;
+  }
+  #historyTable td:nth-child(2), #historyTable td:nth-child(3), #historyTable td:nth-child(4),#historyTable td:nth-child(5){
+    max-width: 150px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #historyTable td:nth-child(1)
+  {
+    max-width: 100px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 /* Optional: Add border to separate */
 #historyTable td:last-child {
     border-left: 2px solid #ccc; /* Adds a separator */
@@ -696,7 +711,7 @@ table td {
 	}
 	
 	#history-list li strong {
-		color: #007bff;
+		color: #66a5e8;
 	}
 	
 }
@@ -718,49 +733,71 @@ td:last-child {
     text-align: center;  /* Ensures the content inside the cell is centered */
 }
 
-/* Restrict the width of the Requester column */
-#pendingContentTable th:nth-child(2), #pendingContentTable td:nth-child(2), #pendingContentTable td:nth-child(1),#pendingContentTable td:nth-child(3) {
-    max-width: 100px; /* Adjust this value as needed */
-    word-wrap: break-word; /* Allow text to wrap */
-    white-space: nowrap; /* Prevent text wrapping */
-    text-overflow: ellipsis; /* Show ellipsis for overflowing text */
-    overflow: hidden; /* Hide overflow */
+/* Restrict width for specific columns in pending table */
+#pendingContentTable th:nth-child(1),
+#pendingContentTable th:nth-child(2),
+#pendingContentTable th:nth-child(3),
+#pendingContentTable td:nth-child(1),
+#pendingContentTable td:nth-child(2),
+#pendingContentTable td:nth-child(3) {
+  max-width: 100px;
+  word-wrap: break-word;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-    /* Style for making the table header sticky */
-    #pendingContentTable {
-        min-height: 400px; /* Adjust as needed */
-        height: auto;
-        max-height: 1000vh; /* Ensures it doesn't grow too tall */
-        overflow-y: auto; /* Adds scrolling if needed */
-    }
 
-    #pendingContentTable thead th {
-        position: static;
-        top: 0;
-        background-color: #5fa8fa; /* Adjust color as needed */
-        z-dashboard: 1;
-        padding: 8px;
-		font-style: var(--dark);
-    }
+/* Make the pending content table scrollable */
+#pendingContentTable {
+  min-height: 400px;
+  max-height: 1000vh;
+  overflow-y: auto;
+}
 
-    #pendingContentTable tbody {
-        max-height: 100%; /* Set desired max height */
-        overflow-y: auto;
-        display: block;
-    }
-
-    #pendingContentTable thead,
-    #pendingContentTable tbody tr {
-        display: table;
-        width: 100%;
-        table-layout: fixed; /* Fix column widths */
-    }
-
+#pendingContentTable thead,
+#pendingContentTable tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
     #pendingContentTable th, #pendingContentTable td {
         padding: 8px;
         text-align: center;
     }
-
+    td:last-child {
+        text-align: center;
+      }
+      /* Toggle Button Container (optional) */
+.table-toggle-buttons {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  /* Base styles for toggle buttons */
+  .table-toggle-buttons button {
+    background-color: #3796c6;
+    color: #414141;
+    border: none;
+    padding: 10px 20px;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Hover effect */
+  .table-toggle-buttons button:hover {
+    background-color:#5babd2;
+    transform: scale(1.05);
+  }
+  
+  /* Active state for the selected button */
+  .table-toggle-buttons button.active {
+    background-color:#3093fc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
 /* Modal styles */
 .modal {
     display:none; /* Hidden by default */
