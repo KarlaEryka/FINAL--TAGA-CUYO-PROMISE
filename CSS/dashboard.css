@@ -36,16 +36,15 @@ html {
 }
 
 body {
-    background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
+    background: linear-gradient(270deg, #c0c3c8, #dde0e4, #a8abaf);
     background-size: 400% 400%;
-    animation: gradientBG 8s ease infinite;
     overflow-x: hidden;
 }
 
 @keyframes gradientBG {
-    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
     50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
 }
 
 
@@ -63,7 +62,6 @@ li {
 	width: 100%;
     background: linear-gradient(180deg, #1E293B, #334155);
     background-size: 400% 400%;
-    animation: gradientBG 8s ease infinite;
     overflow-x: hidden;
 	top: 0;
 	left: 0;
@@ -162,7 +160,6 @@ li {
 	text-transform: uppercase;
 	font-weight: 700;
 	color: var(--dark-grey);
-	transition: all .3s ease;
 	white-space: nowrap;
 }
 #sidebar.hide:hover .divider { 
@@ -230,9 +227,9 @@ li {
 	width: calc(100% - 260px);
 	left: 260px;
 	transition: all .3s ease;
-    background: linear-gradient(145deg, #cfd8dc,#ededed);
+    background: linear-gradient(270deg, #e6ecf8, #dde0e4, #dde2e9);
     background-size: 400% 400%;
-    animation: gradientBG 8s ease infinite;
+    animation: gradientBG 15s ease infinite;
     overflow-x: hidden;
 }
 #sidebar.hide + #content {
@@ -241,7 +238,7 @@ li {
 }
 /* NAVBAR */
 nav {
-    background: #ffffff;
+    background: #f1f1f3;
 	height: 64px;
 	padding: 0 20px;
 	display: flex;
@@ -565,6 +562,31 @@ main .content-data .chart::-webkit-scrollbar {
     max-width: 800px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 
+}
+/* Fix the size of the user support card */
+.user-support-card {
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden; /* Prevents resizing */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Ensure content inside the card scrolls instead of resizing */
+.user-support-content {
+    flex-grow: 1; /* Fills the available space */
+    overflow-y: auto; /* Enables scrolling for long content */
+    padding-right: 10px;
+}
+
+/* Hide scrollbar for a cleaner look */
+.user-support-content::-webkit-scrollbar {
+    display: none;
+}
+.user-support-content {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 /* Hover Effect */
