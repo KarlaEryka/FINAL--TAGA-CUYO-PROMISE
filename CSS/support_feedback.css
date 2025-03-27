@@ -346,7 +346,6 @@ nav .divider {
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-	margin-right: 50px;
 }
 
 /* Profile link */
@@ -402,35 +401,6 @@ main .title {
     border: none;               /* Remove default border */
     border-top: 2px solid #ccc;  /* Custom thickness and color */               /* Full width of the container */
     margin: 20px 0;             /* Adds space above and below the line */
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    border: 2px solid #ccc;
-    border-radius: 25px;
-    padding: 5px;
-    width: 300px;
-}
-
-.search-bar input {
-    border: none;
-    outline: none;
-    flex-grow: 1;
-    padding: 5px 10px;
-    border-radius: 25px;
-}
-
-.search-bar button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-}
-
-.search-bar button i {
-    color: #333;
-    font-size: 16px;
 }
 
 .header-search {
