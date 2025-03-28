@@ -25,7 +25,7 @@ html {
 }
 
 body {
-    background: linear-gradient(270deg, #c0c3c8, #dde0e4, #a8abaf);
+    background: linear-gradient(270deg, #e6ecf8, #dde0e4, #dde2e9);
     background-size: 400% 400%;
     overflow-x: hidden;
 }
@@ -211,18 +211,6 @@ li {
 	font-weight: 700;
 }
 /* SIDEBAR */
-
-/* CONTENT */
-#content {
-	position: relative;
-	width: calc(100% - 260px);
-	left: 260px;
-	transition: all .3s ease;
-    background: linear-gradient(145deg, #cfd8dc,#ededed);
-    background-size: 400% 400%;
-    animation: gradientBG 8s ease infinite;
-    overflow-x: hidden;
-}
 #sidebar.hide + #content {
 	width: calc(100% - 60px);
 	left: 60px;
@@ -261,7 +249,6 @@ main .content-data .chart::-webkit-scrollbar {
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
     overflow-x: hidden;
-    height: 700px;
 }
 #sidebar.hide + #content {
 	width: calc(100% - 60px);
@@ -604,9 +591,10 @@ table th, table td {
 
 
 table th {
-    background-color: #f8f9fa;
+    background-color:  #5babd2;
     font-weight: bold;
 	width: 5000px;
+    color: #000;
 }
 
 table tr:nth-child(even) {

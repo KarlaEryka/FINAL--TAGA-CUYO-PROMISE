@@ -204,7 +204,6 @@ html {
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
     overflow-x: hidden;
-    height: 690px;
 }
 
 #sidebar.hide + #content {
@@ -479,7 +478,7 @@ nav .profile .profile-link a:hover {
 /* NAVBAR */
 
 body {
-  background: linear-gradient(270deg, #c0c3c8, #dde0e4, #a8abaf);
+  background: linear-gradient(270deg, #e6ecf8, #dde0e4, #dde2e9);
   background-size: 400% 400%;
   overflow-x: hidden;
 }

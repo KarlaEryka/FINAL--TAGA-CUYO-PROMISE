@@ -1,4 +1,4 @@
-// Firebase configuration and initialization (keep this part the same)
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAqr7jav_7l0Y7gIhfTklJXnHPzjAYV8f4",
     authDomain: "taga-cuyo-app.firebaseapp.com",
@@ -9,21 +9,21 @@ const firebaseConfig = {
     measurementId: "G-NVSY2HPNX4"
 };
 
-// Initialize Firebase
+// Initialize Firebase (v8 style)
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
-const rtdb = firebase.database();
+const rtdb = firebase.database(); // Initialize Realtime Database
 
-// Authentication and user management functions (keep these the same)
+// Check if the user is authenticated and their admin status
 auth.onAuthStateChanged((user) => {
     if (user) {
         user.getIdTokenResult().then((idTokenResult) => {
             if (idTokenResult.claims.admin) {
                 console.log("Admin access granted.");
-                fetchUsers();
+                fetchUsers(); // Fetch users directly if admin
             } else {
-                checkAdminAccount(user.uid);
+                checkAdminAccount(user.uid); // Check if the user has admin access
             }
         }).catch((error) => {
             console.error("Error checking admin status: ", error);
@@ -34,12 +34,13 @@ auth.onAuthStateChanged((user) => {
     }
 });
 
+// Function to check if the admin account exists in the admin collection
 function checkAdminAccount(uid) {
-    const adminRef = db.collection("admin").doc(uid);
+    const adminRef = db.collection("admin").doc(uid); // Reference to the specific admin document
     adminRef.get().then((doc) => {
         if (doc.exists) {
             console.log("Admin account exists:", doc.data());
-            fetchUsers();
+            fetchUsers(); // Call fetchUsers if admin account exists
         } else {
             console.error("Admin account does not exist.");
             alert("You do not have permission to view this data.");
@@ -50,9 +51,10 @@ function checkAdminAccount(uid) {
     });
 }
 
+// Function to encrypt the email (show first 3 and last 2 characters before "@" and hide the rest)
 function encryptEmail(email) {
     const atIndex = email.indexOf('@');
-    if (atIndex === -1) return email;
+    if (atIndex === -1) return email; // If no "@" symbol is found, return the email as is
     const localPart = email.substring(0, atIndex);
     const domainPart = email.substring(atIndex);
     if (localPart.length > 5) {
@@ -65,6 +67,7 @@ function encryptEmail(email) {
     return email;
 }
 
+// Function to fetch users from Firestore and render their rows
 function fetchUsers() {
     console.log("Fetching user data...");
     db.collection("users")
@@ -76,7 +79,7 @@ function fetchUsers() {
                 return;
             }
             const userTableBody = document.getElementById("user-table-body");
-            userTableBody.innerHTML = "";
+            userTableBody.innerHTML = ""; // Clear previous rows
 
             querySnapshot.forEach((doc) => {
                 const userData = doc.data();
@@ -86,6 +89,7 @@ function fetchUsers() {
                     createdAt = userData.createdAt.toDate().toLocaleDateString();
                 }
 
+                // Create the table row with a placeholder for status
                 let row = document.createElement("tr");
                 row.id = `user-row-${doc.id}`;
                 row.innerHTML = `  
@@ -101,6 +105,8 @@ function fetchUsers() {
                     <td class="center" id="status-${doc.id}">Loading...</td>
                 `;
                 userTableBody.appendChild(row);
+
+                // Set the status by reading from the Realtime Database
                 updateUserStatusRealtime(doc.id);
             });
         })
@@ -110,6 +116,7 @@ function fetchUsers() {
         });
 }
 
+// Function to listen for realtime status updates for a specific user
 function updateUserStatusRealtime(userId) {
     const statusElement = document.getElementById(`status-${userId}`);
     const userStatusRef = rtdb.ref(`users/${userId}`);
@@ -122,11 +129,13 @@ function updateUserStatusRealtime(userId) {
                 statusElement.style.backgroundColor = "rgb(19, 178, 101)";
                 statusElement.style.color = "white";
             } else {
+                // If offline, simply show "Offline"
                 statusElement.textContent = "Offline";
                 statusElement.style.backgroundColor = "gray";
                 statusElement.style.color = "white";
             }
         } else {
+            // Fallback if no data is found
             statusElement.textContent = "Offline";
             statusElement.style.backgroundColor = "gray";
             statusElement.style.color = "white";
@@ -134,41 +143,22 @@ function updateUserStatusRealtime(userId) {
     });
 }
 
-// Improved menu handling
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle dropdown menus
-    const dropdownToggles = document.querySelectorAll('.side-menu > li > a:has(+ .side-dropdown)');
+document.addEventListener('DOMContentLoaded', function () {
+    // Toggle User Management dropdown
+    const userManagementToggle = document.querySelector('.side-menu > li > a'); 
+    const userManagementDropdown = document.querySelector('.side-dropdown');
     
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-            // Only prevent default for dropdown toggles
-            if (this.nextElementSibling && this.nextElementSibling.classList.contains('side-dropdown')) {
-                e.preventDefault();
-                const dropdown = this.nextElementSibling;
-                
-                // Close other open dropdowns
-                document.querySelectorAll('.side-dropdown').forEach(dd => {
-                    if (dd !== dropdown) {
-                        dd.classList.remove('show');
-                        dd.closest('li').classList.remove('active');
-                    }
-                });
-                
-                // Toggle current dropdown
-                dropdown.classList.toggle('show');
-                this.closest('li').classList.toggle('active');
-            }
-            // Regular links will work normally
+    userManagementToggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        userManagementDropdown.classList.toggle('show');
+    });
+
+    // Add click handler for dashboard menu
+    const dashboardMenu = document.getElementById('dashboard-menu');
+    if (dashboardMenu) {
+        dashboardMenu.addEventListener('click', function(e) {
+            // No need for preventDefault() here since we want the link to work normally
+            window.location.href = 'dashboard.html';
         });
-    });
-    
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.side-menu li')) {
-            document.querySelectorAll('.side-dropdown').forEach(dropdown => {
-                dropdown.classList.remove('show');
-                dropdown.closest('li').classList.remove('active');
-            });
-        }
-    });
+    }
 });

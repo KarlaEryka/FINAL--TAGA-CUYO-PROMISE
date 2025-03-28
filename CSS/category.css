@@ -24,7 +24,7 @@ html {
 }
 
 body {
-	background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
+    background: linear-gradient(270deg, #e6ecf8, #dde0e4, #dde2e9);
     background-size: 400% 400%;
     animation: gradientBG 8s ease infinite;
     overflow-x: hidden;
@@ -518,7 +518,6 @@ main .title {
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
     overflow-x: hidden;
-    height:690px ;
 }
 @media screen and (max-width: 68px) {}
 .custom-line {
@@ -577,7 +576,7 @@ table th, table td {
 
 table th {
     background-color: #5babd2;
-    color: white;
+    color: rgb(34, 33, 33);
     font-weight: bold;
     text-align: center;
 }

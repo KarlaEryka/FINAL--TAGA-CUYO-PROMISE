@@ -132,7 +132,7 @@
         <div class="caption" id="caption"></div>
     </div>
     <script>
-      // Initialize Firebase
+// Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyAqr7jav_7l0Y7gIhfTklJXnHPzjAYV8f4",
     authDomain: "npm install firebase",
@@ -175,7 +175,7 @@ window.onclick = function (event) {
 // Fetch tickets from Firestore
 async function fetchTickets() {
     const tableBody = document.getElementById("ticketsTableBody");
-    tableBody.innerHTML = ""; // Clear previous data
+    tableBody.innerHTML = "";
 
     const user = firebase.auth().currentUser;
     if (!user) {
@@ -184,32 +184,38 @@ async function fetchTickets() {
     }
 
     try {
-        // Check if the user is an admin
         const adminDoc = await db.collection("admin").doc(user.uid).get();
         const isAdmin = adminDoc.exists && ["admin", "superadmin"].includes(adminDoc.data().role);
 
         let query = db.collection("tickets");
         if (!isAdmin) {
-            query = query.where("uid", "==", user.uid); // Normal users can only see their own tickets
+            query = query.where("uid", "==", user.uid);
         }
 
         const querySnapshot = await query.orderBy("timeStamp", "desc").get();
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            const maskedEmail = maskEmail(data.email || "No email available");
+            const submitterEmail = data.email || "No email available";
+            const currentUserEmail = user.email; // Get current user's email
+            
+            // Create mailto link that pre-fills both from and to addresses
+            const emailLink = submitterEmail !== "No email available" 
+                ? `<a href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(submitterEmail)}&su=Regarding Your Support Ticket&body=Dear ${encodeURIComponent(data.name || 'User')},%0A%0A" 
+                   target="_blank" class="email-link">${submitterEmail}</a>`
+                : submitterEmail;
+
             const imageUrl = data.imageIssue?.length > 0
                 ? `<img src="${data.imageIssue[0]}" alt="Issue Image" width="50px" class="clickable-image">`
                 : "No image";
             const name = data.name || data.fullName || "No name available";
             const submittedAt = data.timeStamp
-                ? new Date(data.timeStamp).toLocaleString()  // ✅ No need for toDate()
+                ? new Date(data.timeStamp).toLocaleString()
                 : "No date available";
-
 
             const row = `
                 <tr>
-                    <td>${maskedEmail}</td>
+                    <td>${emailLink}</td>
                     <td>${name}</td>
                     <td>${data.issue}</td>
                     <td>${submittedAt}</td>
@@ -231,30 +237,31 @@ async function fetchTickets() {
                 caption.innerHTML = this.alt;
             });
         });
+
+        // Add hover effect for email links
+        const style = document.createElement('style');
+        style.textContent = `
+            .email-link {
+                color: #0066cc;
+                text-decoration: none;
+            }
+            .email-link:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        `;
+        document.head.appendChild(style);
+
     } catch (error) {
         console.error("Error fetching tickets:", error);
     }
 }
-    // Function to mask the email address
-    function maskEmail(email) {
-        let parts = email.split("@");
-        let username = parts[0];
-        let domain = parts[1];
 
-        if (username.length > 2) {
-            return username[0] + "*".repeat(username.length - 2) + username[username.length - 1] + "@" + domain;
-        }
-        return email;
-    }
-
-    // Call fetchTickets when the page loads
-    window.onload = function() {
-        fetchTickets();
-    };
-
-
-    </script>
-
+// Call fetchTickets when the page loads
+window.onload = function() {
+    fetchTickets();
+};
+</script>
     <script type="module" src="scripts/logout.js"></script>
 
         <script src="scripts/script.js"></script>
