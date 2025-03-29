@@ -513,12 +513,6 @@ list-style: none;
     --alt-row-bg: #c7d9e5;
   }
   
-  body {
-    background: linear-gradient(270deg, #dbe1e6, #bfbfbf, #f3e7e7);
-    background-size: 400% 400%;
-    animation: gradientBG 8s ease infinite;
-    overflow-x: hidden;
-  }
   
   .add-btn {
     background-color: var(--primary-green);
