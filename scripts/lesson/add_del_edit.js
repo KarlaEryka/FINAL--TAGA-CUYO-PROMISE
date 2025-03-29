@@ -113,7 +113,8 @@ async function deleteWord(lessonId, wordId) {
             });
 
             console.log("📜 Activity logged successfully!");
-            loadLessonsAndWords();
+            loadLessonsAndWords(lessonId);
+            await loadFilterOptions(lessonId);
         } catch (error) {
             console.error("Error deleting content:", error);
             alert("Failed to delete content. Please try again.");
